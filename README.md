@@ -59,8 +59,5 @@ To view the project open `http://localhost:3000`.
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for more information.
 
----
-
-Made with ♥ by Clare Chang
+Made with ♥ by Habil Cangir, Niyazi Emre Akbaş, Bahadır Semih Korkmaz
