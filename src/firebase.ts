@@ -3,13 +3,13 @@ import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCdbnY5opBDDT6gasUZuqmrFqOJvS_5bXc',
-  authDomain: 'ucuza-kargola-test.firebaseapp.com',
-  projectId: 'ucuza-kargola-test',
-  storageBucket: 'ucuza-kargola-test.appspot.com',
-  messagingSenderId: '765618233973',
-  appId: '1:765618233973:web:2db057b9739886900a4e3c',
-}
+  apiKey: "AIzaSyAsh6LyCnS935QSx1N25gqKtF5flVU0YCs",
+  authDomain: "mist-b91c0.firebaseapp.com",
+  projectId: "mist-b91c0",
+  storageBucket: "mist-b91c0.firebasestorage.app",
+  messagingSenderId: "262859421675",
+  appId: "1:262859421675:web:dc56c64a83e6f7c52a4bae",
+};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)

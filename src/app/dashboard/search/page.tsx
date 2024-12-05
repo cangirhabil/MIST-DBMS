@@ -24,7 +24,6 @@ export default function SearchPage() {
       )}
       <div className="container mx-auto py-8 max-w-6xl">
         <MovieSearch />
-        //Add page here
       </div>
     </div>
   )
