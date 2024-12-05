@@ -1,0 +1,33 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Movie {
+  id          Int          @id @default(autoincrement())
+  title       String
+  releaseYear Int         @map("release_year")
+  posterUrl   String?     @map("poster_url")
+  rating      Float?
+  director    String?
+  duration    Int?
+  overview    String?
+  genres      Genre[]     @relation("MovieToGenre")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  @@map("movies")
+}
+
+model Genre {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  movies  Movie[]  @relation("MovieToGenre")
+
+  @@map("genres")
+}
