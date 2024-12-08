@@ -1,11 +1,19 @@
-node_modules
+
 # Dependency directories
+/node_modules
 /.pnp
 .pnp.js
+
+
+# testing
+/coverage
 
 # Next.js build output
 .next/
 /out/
+
+# production
+/build
 
 # Next.js static files
 /public/static
@@ -34,6 +42,7 @@ yarn-error.log*
 # OS generated files
 .DS_Store
 Thumbs.db
+*.pem
 
 # IDEs and editors
 .vscode/
@@ -42,3 +51,14 @@ Thumbs.db
 *.ntvs*
 *.njsproj
 *.sln
+
+# vercel
+.vercel
+
+
+
+
+
+
+
+
