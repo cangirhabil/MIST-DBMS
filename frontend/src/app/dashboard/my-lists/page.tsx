@@ -2,19 +2,11 @@
 import React from 'react'
 import loadingAnimation from '../../../../public/loading-animation.json'
 import dynamic from 'next/dynamic'
-import { Plus, Edit, Trash2, Film, Search } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { MovieList } from '@/types/MovieList'
-import { Movie } from '@/types/movie'
+import { Movie } from '@/types/Movie'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import {
   Dialog,
   DialogContent,
@@ -27,9 +19,9 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { MovieListCard } from '@/components/my-lists/MovieListCard'
 import { ViewListDialog } from '@/components/my-lists/ViewListDialog'
+
 
 const Lottie = dynamic(() => import('lottie-react'), {
   ssr: false,
@@ -67,20 +59,23 @@ const MyListsPage: React.FC = () => {
     )
   }
 
-  const handleRemoveMovieFromList = (listId: string, movieId: number) => {
-    setLists((prev) =>
-      prev.map((list) => {
-        if (list.id === listId) {
-          return {
-            ...list,
-            movies: list.movies.filter((m) => m.id !== movieId),
-            movieCount: list.movieCount - 1,
-          }
+const handleRemoveMovieFromList = (listId: string, movieId: number) => {
+  setLists((prev) =>
+    prev.map((list) => {
+      if (list.id === listId) {
+        const updatedList = {
+          ...list,
+          movies: list.movies.filter((m) => m.id !== movieId),
+          movieCount: list.movieCount - 1,
         }
-        return list
-      }),
-    )
-  }
+        // Update selectedList immediately
+        setSelectedList(updatedList)
+        return updatedList
+      }
+      return list
+    }),
+  )
+}
 
   const handleEditList = () => {
     if (!editingList) return
@@ -121,7 +116,7 @@ const MyListsPage: React.FC = () => {
         id: '1',
         title: 'Best Sci-Fi Movies',
         description: 'My favorite science fiction movies',
-        movieCount: 3,
+        movieCount: 1,
         createdAt: '2024-03-20',
         movies: [
           {

@@ -1,10 +1,16 @@
 // app/api/search-movies/route.ts
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { handleApiError, ApiError } from '@/lib/error'
+import type { Movie, SearchParams } from '@/types/Movie'
 
 export async function POST(request: Request) {
   try {
-    const { query, genre, yearRange, sortBy } = await request.json()
+    const { query, genre, yearRange, sortBy } = (await request.json()) as SearchParams
+
+    if (!query && genre === 'all') {
+      throw new ApiError(400, 'Search query or genre is required')
+    }
 
     const movies = await prisma.movie.findMany({
       where: {
@@ -46,14 +52,19 @@ export async function POST(request: Request) {
           case 'title':
             return { title: 'asc' }
           default:
-            return { title: 'asc' } // varsayılan sıralama
+            return {
+              _relevance: {
+                fields: ['title', 'overview'],
+                search: query,
+                sort: 'desc',
+              },
+            }
         }
       })(),
       take: 20,
     })
 
-    // API yanıtını istediğimiz formata dönüştürme
-    const formattedMovies = movies.map((movie) => ({
+    const formattedMovies = movies.map((movie:Movie) => ({
       id: movie.id,
       title: movie.title,
       releaseYear: movie.releaseYear,
@@ -62,12 +73,12 @@ export async function POST(request: Request) {
       director: movie.director,
       duration: movie.duration,
       overview: movie.overview,
-      genres: movie.genres.map((genre) => genre.name),
+      genres: movie.genres.map((genre) => genre),
     }))
 
     return NextResponse.json({ movies: formattedMovies })
   } catch (error) {
-    console.error('Search error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    const { error: errorMessage, statusCode } = handleApiError(error)
+    return NextResponse.json({ error: errorMessage }, { status: statusCode })
   }
 }
