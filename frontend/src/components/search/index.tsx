@@ -15,7 +15,7 @@ import {
 import { Slider } from '@/components/ui/slider'
 import { Button } from '@/components/ui/button'
 import { Star, Clock, Calendar } from 'lucide-react'
-import type { Movie } from '@/types/movie'
+import type { Movie } from '@/types/Movie'
 
 export default function MovieSearch() {
   const [searchQuery, setSearchQuery] = useState('')

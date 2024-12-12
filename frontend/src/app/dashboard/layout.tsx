@@ -8,7 +8,7 @@ export default function Layout({ children }: any) {
           <Sidebar />
         </div>
         <div className="flex-1 p-6 ml-20 md:ml-64">
-          <div className="max-w-4xl mx-auto bg-white rounded-lg shadow p-6">
+          <div className="max-w-10xl mx-auto bg-white rounded-lg shadow p-6">
             {children}
           </div>
           <Toaster />
