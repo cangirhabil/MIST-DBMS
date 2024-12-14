@@ -11,7 +11,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useToast } from '@/hooks/use-toast'
 
-import { loginWithEmailAndPassword, signupWithEmailAndPassword } from '@/services/login.service'
+import { loginWithEmailAndPassword, signupWithEmailAndPassword } from '@/services/auth.service'
 import { AuthGuard } from '@/components/auth/AuthGuard'
 import { ROUTE_PATHS } from '@/constants/route'
 import dynamic from 'next/dynamic'
@@ -107,16 +107,17 @@ export default function AuthPage() {
           </div>
           <div className="relative z-20 mt-auto">
             <blockquote className="space-y-2 text-black">
-                <p className="text-lg">
-                &ldquo;Film ve dizi tutkunları için en kapsamlı platform. Kişiselleştirilmiş listeler oluşturabilir, 
-                izleme geçmişinizi takip edebilir ve yeni keşifler yapabilirsiniz.&rdquo;
-                </p>
+              <p className="text-lg">
+                &ldquo;Film ve dizi tutkunları için en kapsamlı platform. Kişiselleştirilmiş
+                listeler oluşturabilir, izleme geçmişinizi takip edebilir ve yeni keşifler
+                yapabilirsiniz.&rdquo;
+              </p>
               <footer className="text-sm">Habil Cangir</footer>
             </blockquote>
           </div>
         </div>
         <div>
-            <div className="mx-auto flex w-full flex-col justify-center space-y-6 px-20">
+          <div className="mx-auto flex w-full flex-col justify-center space-y-6 px-20">
             <Card>
               <CardHeader className="space-y-1">
                 <CardTitle className="text-2xl font-bold">

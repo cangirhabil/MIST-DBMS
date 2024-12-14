@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { checkIsAdmin } from './services/login.service'
+import { checkIsAdmin } from './services/auth.service'
 
 export async function middleware(request: NextRequest) {
   // Admin sayfaları için middleware kontrolü

@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { toast } from '@/hooks/use-toast'
-import { updatePassword } from '@/services/login.service'
-import { getUserProfile, updateUserProfile } from '@/services/firebase.service'
+import { updatePassword } from '@/services/auth.service'
+import { getUserProfile, updateUserProfile } from '@/services/user.service'
 
 interface LoadingState {
   name: boolean
@@ -54,7 +54,8 @@ export const useAccountSettingsStore = create<AccountSettingsStore>((set, get) =
     } catch (error) {
       toast({
         title: 'Hata',
-        description: error instanceof Error ? error.message : 'Profil bilgilerini yükleme başarısız oldu',
+        description:
+          error instanceof Error ? error.message : 'Profil bilgilerini yükleme başarısız oldu',
         variant: 'destructive',
       })
     } finally {

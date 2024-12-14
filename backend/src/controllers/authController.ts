@@ -4,11 +4,13 @@ import jwt from "jsonwebtoken";
 import { hashPassword, comparePassword } from "../utils/passwordUtils";
 import { LoginDTO, RegisterDTO } from "../interfaces/auth.types";
 const prisma = new PrismaClient();
+
+
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { email, password, name, surname }: RegisterDTO = req.body;
+    const { email, password, name }: RegisterDTO = req.body;
     
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
@@ -18,7 +20,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     const hashedPassword = await hashPassword(password);
     const user = await prisma.user.create({
-      data: { email, password: hashedPassword, name, surname },
+      data: { email, password: hashedPassword, name },
     });
 
     const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "24h" });

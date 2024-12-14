@@ -1,22 +1,23 @@
-import { UserRole } from '@/types/auth'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 interface AuthState {
-  user: UserRole | null
-  setUser: (user: UserRole | null) => void
-  clearUser: () => void
+  user: any | null
+  token: string | null
+  setAuth: (user: any, token: string) => void
+  clearAuth: () => void
 }
 
-const useAuthStore = create<AuthState>()(
+export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       user: null,
-      setUser: (user) => set({ user }),
-      clearUser: () => set({ user: null }),
+      token: null,
+      setAuth: (user, token) => set({ user, token }),
+      clearAuth: () => set({ user: null, token: null }),
     }),
     {
-      name: 'auth-storage', // localStorage'da saklanacak key
+      name: 'auth-storage',
     },
   ),
 )

@@ -1,7 +1,7 @@
 // app/providers/UserProvider.tsx
 'use client'
 
-import { getUserProfile } from '@/services/firebase.service'
+import { getUserProfile } from '@/services/user.service'
 import { useUserStore } from '@/store/user'
 import { useEffect } from 'react'
 

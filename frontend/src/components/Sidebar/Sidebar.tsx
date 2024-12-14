@@ -8,12 +8,13 @@ import { FiSettings } from 'react-icons/fi'
 import { SidebarItem } from './SidebarItem'
 import { LogoutIcon } from '../shared/Icons'
 import { cn } from '@/lib/utils'
-import { logOut } from '@/services/login.service'
+import { logOut } from '@/services/auth.service'
 import { usePathname, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { ROUTE_NAMES, ROUTE_PATHS } from '@/constants/route'
 import { RouterHelper } from '@/utils/routerConfig'
 import { useUserStore } from '@/store/user'
+import { User } from '@/types/user'
 
 export const Sidebar: FC = () => {
   const [activeItem] = useState('Gönder')
@@ -21,8 +22,8 @@ export const Sidebar: FC = () => {
   const currentUser = useUserStore((state) => state.currentUser)
   const userProfile: User = {
     name: currentUser?.name || '',
-    surname: currentUser?.surname || '',
     email: currentUser?.email || '',
+    password: '',
   }
 
   const pathname = usePathname() // Mevcut yol adını al
@@ -118,9 +119,7 @@ export const Sidebar: FC = () => {
         <div className="border-t border-gray-200 p-3 md:p-4 mt-auto">
           <div className="flex flex-col space-y-2">
             <div className="hidden md:block">
-              <div className="text-sm font-medium text-gray-900 truncate">
-                {userProfile.name} {userProfile.surname}
-              </div>
+              <div className="text-sm font-medium text-gray-900 truncate">{userProfile.name}</div>
               <div className="text-xs text-gray-500 truncate">{userProfile.email}</div>
             </div>
           </div>
