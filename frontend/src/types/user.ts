@@ -1,9 +1,8 @@
 import { MovieList } from "./MovieList"
 
-type User = {
+export type User = {
   id?: string
   name?: string
-  surname?: string
   email: string
   password: string
   Lists?: MovieList[]

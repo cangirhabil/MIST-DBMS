@@ -1,4 +1,5 @@
 // store/useStore.ts
+import { User } from '@/types/user'
 import { create } from 'zustand'
 
 type UserStore = {

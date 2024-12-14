@@ -6,7 +6,6 @@ import { LoginDTO, RegisterDTO } from "../interfaces/auth.types";
 const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
-
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password, name, surname }: RegisterDTO = req.body;
@@ -33,7 +32,6 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ error: "Registration failed" });
   }
 };
-
 
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
