@@ -92,11 +92,10 @@ export const updatePassword = async (oldPassword: string, newPassword: string): 
 export const logOut = async (): Promise<void> => {
   const clearAuth = useAuthStore.getState().clearAuth
   try {
-    await api.post('/auth/logout')
+    
     clearAuth()
   } catch (error) {
     console.error('Logout error:', error)
-    // Still clear the auth state even if the API call fails
     clearAuth()
   }
 }
