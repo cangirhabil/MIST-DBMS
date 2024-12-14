@@ -9,8 +9,7 @@ router.post(
   "/register",
   [
     body("email").isEmail(),
-    body("pass
-      word").isLength({ min: 6 }),
+    body("password").isLength({ min: 6 }),
     body("name").exists(),
     body("surname").exists(),
     validateRequest,
