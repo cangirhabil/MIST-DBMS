@@ -4,10 +4,13 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export class UserProfileController {
-
   async getUserProfile(req: Request, res: Response) {
     try {
       const userId = req.params.userId;
+      if (!userId) {
+        return res.status(400).json({ error: "User ID is required" });
+      }
+
       const user = await prisma.user.findUnique({
         where: { id: userId },
         select: {
@@ -39,6 +42,10 @@ export class UserProfileController {
   async updateUserProfile(req: Request, res: Response) {
     try {
       const userId = req.params.userId;
+      if (!userId) {
+        return res.status(400).json({ error: "User ID is required" });
+      }
+
       const { name, email } = req.body;
 
       // Validate that at least one field is provided

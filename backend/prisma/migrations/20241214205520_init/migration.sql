@@ -1,6 +1,3 @@
--- CreateEnum
-CREATE TYPE "LoadingStatus" AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'FAILED');
-
 -- CreateTable
 CREATE TABLE "Movie" (
     "id" SERIAL NOT NULL,
@@ -45,29 +42,6 @@ CREATE TABLE "MovieList" (
     "userId" TEXT NOT NULL,
 
     CONSTRAINT "MovieList_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "SearchParams" (
-    "id" SERIAL NOT NULL,
-    "query" TEXT NOT NULL,
-    "genre" TEXT NOT NULL,
-    "yearRange" INTEGER[],
-    "sortBy" TEXT NOT NULL,
-
-    CONSTRAINT "SearchParams_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "MovieLoading" (
-    "id" TEXT NOT NULL,
-    "sourceFile" TEXT NOT NULL,
-    "loadedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "totalMovies" INTEGER NOT NULL,
-    "status" "LoadingStatus" NOT NULL,
-    "errorMessage" TEXT,
-
-    CONSTRAINT "MovieLoading_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable

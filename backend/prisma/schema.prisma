@@ -46,11 +46,3 @@ model MovieList {
   user        User     @relation("UserLists", fields: [userId], references: [id])
   userId      String
 }
-
-model SearchParams {
-  id        Int      @id @default(autoincrement())
-  query     String
-  genre     String
-  yearRange Int[]
-  sortBy    String
-}

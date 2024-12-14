@@ -18,13 +18,13 @@ const validateRequest = (req: Request, res: Response, next: NextFunction): void 
 };
 
 // Wrapper function for getUserProfile
-router.get("/:userId", (req: Request, res: Response, next: NextFunction) => {
+router.get("/userId:", (req: Request, res: Response, next: NextFunction) => {
   userProfileController.getUserProfile(req, res).catch(next);
 });
 
 // Wrapper function for updateUserProfile
 router.put(
-  "/:userId",
+  "/userId:",
   [
     body("name")
       .optional()

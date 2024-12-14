@@ -12,7 +12,7 @@ app.use(express.json());
 
 app.use("/auth", authRoutes);
 app.use("/movies", movieRoutes);
-app.use("/userProfile", userProfileRoutes)
+app.use("/user", userProfileRoutes)
 
 app.use(errorHandler);
 
