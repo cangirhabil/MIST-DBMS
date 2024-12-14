@@ -1,4 +1,3 @@
-// src/routes/movie.routes.ts
 import { Router } from "express";
 import { MovieController } from "../controllers/movieController";
 

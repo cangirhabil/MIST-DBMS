@@ -1,18 +1,15 @@
+import { Genre } from './Genre'
+
 export interface Movie {
   id: number
   title: string
   releaseYear: number
-  posterUrl: string
-  rating: number
-  genres: string[]
-  director: string
-  duration: number
-  overview: string
-}
-
-export interface SearchParams {
-  query: string
-  genre: string
-  yearRange: [number, number]
-  sortBy: 'rating' | 'year' | 'title' | 'relevance'
+  posterUrl?: string 
+  rating?: number 
+  director?: string 
+  duration?: number 
+  overview?: string 
+  genres: Genre[]
+  createdAt: Date
+  updatedAt: Date
 }
