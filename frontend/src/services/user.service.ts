@@ -1,8 +1,8 @@
 import { User } from '../types/user';
+import { useAuthStore } from '../store/auth';
 
 export const updateUserProfile = async (updatedData: Record<string, any>): Promise<void> => {
-  // Get user token from localStorage or your auth management system
-  const token = localStorage.getItem('token');
+  const token = useAuthStore.getState().token;
 
   if (!token) {
     throw new Error('Kullanıcı giriş yapmamış.');
@@ -31,7 +31,7 @@ export const updateUserProfile = async (updatedData: Record<string, any>): Promi
 }
 
 export const getUserProfile = async (): Promise<User | null> => {
-  const token = localStorage.getItem('token');
+  const token = useAuthStore.getState().token;
 
   if (!token) {
     throw new Error('Kullanıcı giriş yapmamış.');

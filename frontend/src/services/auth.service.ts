@@ -1,7 +1,15 @@
-import { AuthResponse, UserRole } from '@/types/auth'
+import { AuthResponse } from '@/types/auth'
 import useAuthStore from '@/store/auth'
 
-const API_URL = 'http://localhost:3000'
+import axios, { AxiosError } from 'axios'
+const API_URL = process.env.API_URL || 'http://localhost:3003'
+
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
 
 export const signupWithEmailAndPassword = async (
   email: string,
@@ -11,19 +19,11 @@ export const signupWithEmailAndPassword = async (
   const setUser = useAuthStore.getState().setAuth
 
   try {
-    const response = await fetch(`${API_URL}/auth/signup`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password, name }),
+    const { data } = await api.post('/auth/register', {
+      email,
+      password,
+      name,
     })
-
-    const data = await response.json()
-
-    if (!response.ok) {
-      throw new Error(data.message)
-    }
 
     setUser(data.user, data.token)
 
@@ -32,11 +32,17 @@ export const signupWithEmailAndPassword = async (
       user: data.user,
     }
   } catch (error) {
-    console.error('Kayıt hatası:', error)
+    if (error instanceof AxiosError) {
+      return {
+        success: false,
+        user: null,
+        error: error.response?.data?.error || 'Registration failed',
+      }
+    }
     return {
       success: false,
       user: null,
-      error: 'Hesap oluşturulurken bir hata oluştu.',
+      error: 'An unexpected error occurred',
     }
   }
 }
@@ -48,19 +54,10 @@ export const loginWithEmailAndPassword = async (
   const setUser = useAuthStore.getState().setAuth
 
   try {
-    const response = await fetch(`${API_URL}/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
+    const { data } = await api.post('/auth/login', {
+      email,
+      password,
     })
-
-    const data = await response.json()
-
-    if (!response.ok) {
-      throw new Error(data.message)
-    }
 
     setUser(data.user, data.token)
 
@@ -73,48 +70,33 @@ export const loginWithEmailAndPassword = async (
     return {
       success: false,
       user: null,
-      error: error.message || 'Giriş başarısız. Bilgilerinizi kontrol edin.',
+      error: error.response?.data?.message || 'Giriş başarısız. Bilgilerinizi kontrol edin.',
     }
-  }
-}
-
-export const checkIsAdmin = async (uid: string) => {
-  const response = await fetch(`${API_URL}/auth/check-admin/${uid}`)
-  const data = await response.json()
-  return data.isAdmin
-}
-
-export const logOut = async () => {
-  const clearUser = useAuthStore.getState().clearAuth
-  try {
-    await fetch(`${API_URL}/auth/logout`, {
-      method: 'POST',
-    })
-    clearUser()
-  } catch (error) {
-    return error
   }
 }
 
 export const updatePassword = async (oldPassword: string, newPassword: string): Promise<string> => {
   try {
-    const response = await fetch(`${API_URL}/auth/update-password`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ oldPassword, newPassword }),
+    await api.post('/auth/update-password', {
+      oldPassword,
+      newPassword,
     })
-
-    const data = await response.json()
-
-    if (!response.ok) {
-      throw new Error(data.message)
-    }
 
     return 'Şifre başarıyla güncellendi.'
   } catch (error: any) {
     console.error('Şifre güncelleme hatası:', error)
-    throw new Error(error.message || 'Şifre güncellenirken bir hata oluştu.')
+    throw new Error(error.response?.data?.message || 'Şifre güncellenirken bir hata oluştu.')
+  }
+}
+
+export const logOut = async (): Promise<void> => {
+  const clearAuth = useAuthStore.getState().clearAuth
+  try {
+    await api.post('/auth/logout')
+    clearAuth()
+  } catch (error) {
+    console.error('Logout error:', error)
+    // Still clear the auth state even if the API call fails
+    clearAuth()
   }
 }

@@ -1,6 +1,7 @@
 export interface UserRole {
   email: string
   name?: string
+  surname?: string
   uid: string
 }
 

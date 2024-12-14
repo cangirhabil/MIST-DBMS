@@ -5,5 +5,4 @@ export interface LoginDTO {
 
 export interface RegisterDTO extends LoginDTO {
   name?: string;
-  surname?: string;
 }
