@@ -3,6 +3,7 @@ import React from 'react'
 import loadingAnimation from '../../../../public/loading-animation.json'
 
 import dynamic from 'next/dynamic'
+import { AuthGuard } from '@/components/auth/AuthGuard'
 const Lottie = dynamic(() => import('lottie-react'), {
   ssr: false,
   loading: () => <div>Loading...</div>,
@@ -60,7 +61,6 @@ const Rate: React.FC = () => {
           ))}
         </div>
       </div>
-      //add a page here
     </div>
   )
 }

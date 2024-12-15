@@ -21,6 +21,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { MovieListCard } from '@/components/my-lists/MovieListCard'
 import { ViewListDialog } from '@/components/my-lists/ViewListDialog'
+import { movieListService } from '@/services/movieList.service'
 
 
 const Lottie = dynamic(() => import('lottie-react'), {
@@ -43,6 +44,7 @@ const MyListsPage: React.FC = () => {
   const [editingList, setEditingList] = React.useState<MovieList | null>(null)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
   const [listToDelete, setListToDelete] = React.useState<MovieList | null>(null)
+  const [error, setError] = React.useState<string | null>(null)
 
   const handleAddMovieToList = (listId: string, movie: Movie) => {
     setLists((prev) =>
@@ -59,147 +61,90 @@ const MyListsPage: React.FC = () => {
     )
   }
 
-const handleRemoveMovieFromList = (listId: string, movieId: number) => {
-  setLists((prev) =>
-    prev.map((list) => {
-      if (list.id === listId) {
-        const updatedList = {
-          ...list,
-          movies: list.movies.filter((m) => m.id !== movieId),
-          movieCount: list.movieCount - 1,
-        }
-        // Update selectedList immediately
-        setSelectedList(updatedList)
-        return updatedList
-      }
-      return list
-    }),
-  )
-}
+  const handleCreateList = async () => {
+  if (!newList.title) return
 
-  const handleEditList = () => {
-    if (!editingList) return
-
-    setLists((prev) => prev.map((list) => (list.id === editingList.id ? { ...editingList } : list)))
-
-    setIsEditOpen(false)
-    setEditingList(null)
-  }
-
-  const handleCreateList = () => {
-    if (!newList.title) return
-
-    const newListItem: MovieList = {
-      id: Date.now().toString(),
-      title: newList.title,
-      description: newList.description,
-      movieCount: 0,
-      createdAt: new Date().toISOString(),
-      movies: [],
-    }
-
-    setLists((prev) => [...prev, newListItem])
+  try {
+    const createdList = await movieListService.createMovieList(newList.title, newList.description)
+    setLists((prev) => [...prev, createdList])
     setNewList({ title: '', description: '' })
     setIsCreateOpen(false)
+  } catch (error) {
+    console.error('Failed to create list:', error)
+    setError('Failed to create list. Please try again.')
+  }
+}
+
+  const handleEditList = async () => {
+    if (!editingList) return
+
+    try {
+      const updatedList = await movieListService.updateMovieListTitle(
+        editingList.id,
+        editingList.title,
+        editingList.description,
+      )
+
+      setLists((prev) => prev.map((list) => (list.id === editingList.id ? updatedList : list)))
+
+      setIsEditOpen(false)
+      setEditingList(null)
+    } catch (error) {
+      console.error('Failed to update list:', error)
+      setError('Failed to update list. Please try again.')
+    }
   }
 
-  const handleDeleteList = () => {
+  const handleDeleteList = async () => {
     if (!listToDelete) return
-    setLists((prev) => prev.filter((list) => list.id !== listToDelete.id))
-    setIsDeleteDialogOpen(false)
-    setListToDelete(null)
+
+    try {
+      
+      await movieListService.deleteMovieList(listToDelete.id)
+      setLists((prev) => prev.filter((list) => list.id !== listToDelete.id))
+      setIsDeleteDialogOpen(false)
+      setListToDelete(null)
+    } catch (error) {
+      console.error('Failed to delete list:', error)
+      setError('Failed to delete list. Please try again.')
+    }
   }
 
   React.useEffect(() => {
-    setLists([
-      {
-        id: '1',
-        title: 'Best Sci-Fi Movies',
-        description: 'My favorite science fiction movies',
-        movieCount: 1,
-        createdAt: '2024-03-20',
-        movies: [
-          {
-            id: 1,
-            title: 'Inception',
-            releaseYear: 2010,
-            posterUrl: 'https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg',
-            rating: 8.8,
-            genres: ['Sci-Fi', 'Action'],
-            director: 'Christopher Nolan',
-            duration: 148,
-            overview: 'A thief who steals corporate secrets through dream-sharing technology...',
-          },
-        ],
-      },
-      {
-        id: '2',
-        title: 'Classic Movies',
-        description: 'A collection of timeless classic movies',
-        movieCount: 2,
-        createdAt: '2024-03-21',
-        movies: [
-          {
-            id: 2,
-            title: 'The Godfather',
-            releaseYear: 1972,
-            posterUrl: 'https://image.tmdb.org/t/p/w500/rPdtLWNsZmAtoZl9PK7S2wE3qiS.jpg',
-            rating: 9.2,
-            genres: ['Crime', 'Drama'],
-            director: 'Francis Ford Coppola',
-            duration: 175,
-            overview:
-              'The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.',
-          },
-          {
-            id: 3,
-            title: 'Casablanca',
-            releaseYear: 1942,
-            posterUrl: 'https://image.tmdb.org/t/p/w500/5K7cOHoay2mZusSLezBOY0Qxh8a.jpg',
-            rating: 8.5,
-            genres: ['Drama', 'Romance'],
-            director: 'Michael Curtiz',
-            duration: 102,
-            overview:
-              'A cynical expatriate American cafe owner struggles to decide whether or not to help his former lover and her fugitive husband escape the Nazis in French Morocco.',
-          },
-        ],
-      },
-      {
-        id: '3',
-        title: 'Animated Movies',
-        description: 'Top animated movies for all ages',
-        movieCount: 2,
-        createdAt: '2024-03-22',
-        movies: [
-          {
-            id: 4,
-            title: 'Toy Story',
-            releaseYear: 1995,
-            posterUrl: 'https://image.tmdb.org/t/p/w500/uXDfjJbdP4ijW5hWSBrPrlKpxab.jpg',
-            rating: 8.3,
-            genres: ['Animation', 'Adventure'],
-            director: 'John Lasseter',
-            duration: 81,
-            overview:
-              "A cowboy doll is profoundly threatened and jealous when a new spaceman figure supplants him as top toy in a boy's room.",
-          },
-          {
-            id: 5,
-            title: 'Spirited Away',
-            releaseYear: 2001,
-            posterUrl: 'https://image.tmdb.org/t/p/w500/dL11DBPcRhWWnJcFXl9A07MrqTI.jpg',
-            rating: 8.6,
-            genres: ['Animation', 'Fantasy'],
-            director: 'Hayao Miyazaki',
-            duration: 125,
-            overview:
-              "During her family's move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits, and where humans are changed into beasts.",
-          },
-        ],
-      },
-    ])
+    const fetchLists = async () => {
+      setIsLoading(true)
+      try {
+        const fetchedLists = await movieListService.getMovieListsByUserId()
+        setLists(fetchedLists)
+      } catch (error) {
+        console.error('Failed to fetch movie lists:', error)
+        setError('Failed to fetch movie lists. Please try again.')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchLists()
   }, [])
+
+  const handleRemoveMovieFromList = (listId: string, movieId: number) => {
+    setLists((prev) =>
+      prev.map((list) => {
+        if (list.id === listId) {
+          const updatedList = {
+            ...list,
+            movies: list.movies.filter((m) => m.id !== movieId),
+            movieCount: list.movieCount - 1,
+          }
+          setSelectedList(updatedList)
+          return updatedList
+        }
+        return list
+      }),
+    ) 
+  }
+
+ 
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
@@ -208,6 +153,12 @@ const handleRemoveMovieFromList = (listId: string, movieId: number) => {
           <div className="w-24 h-24">
             <Lottie animationData={loadingAnimation} loop={true} />
           </div>
+        </div>
+      )}
+
+      {error && (
+        <div className="fixed top-0 left-0 right-0 bg-red-500 text-white text-center py-2">
+          {error}
         </div>
       )}
 
@@ -242,7 +193,9 @@ const handleRemoveMovieFromList = (listId: string, movieId: number) => {
                 <Textarea
                   id="description"
                   value={newList.description}
-                  onChange={(e) => setNewList((prev) => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) =>
+                    setNewList((prev) => ({ ...prev, description: e.target.value }))
+                  }
                   placeholder="Enter list description"
                 />
               </div>
@@ -277,7 +230,7 @@ const handleRemoveMovieFromList = (listId: string, movieId: number) => {
         ))}
       </div>
 
-      {/* Add Edit Dialog */}
+      
       <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -320,7 +273,8 @@ const handleRemoveMovieFromList = (listId: string, movieId: number) => {
           <DialogHeader>
             <DialogTitle>Delete List</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete "{listToDelete?.title}"? This action cannot be undone.
+              Are you sure you want to delete "{listToDelete?.title}"? This action cannot be
+              undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

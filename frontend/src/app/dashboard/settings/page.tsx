@@ -1,8 +1,10 @@
 'use client'
-import SettingsIndex from '@/components/settings/index'
+
 import React, { useEffect } from 'react'
 import loadingAnimation from '../../../../public/loading-animation.json'
 import dynamic from 'next/dynamic'
+import AccountSettings from '@/components/settings/accountSettings'
+import { AuthGuard } from '@/components/auth/AuthGuard'
 
 const Lottie = dynamic(() => import('lottie-react'), {
   ssr: false,
@@ -30,8 +32,8 @@ export default function SettingsPage() {
           </div>
         </div>
       )}
-      <div className='p-4 sm:p-8'>
-        <SettingsIndex />
+      <div className="p-4 sm:p-8">
+        <AccountSettings />
       </div>
     </div>
   )

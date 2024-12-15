@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Clock, Star, Calendar, User, ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
+import { AuthGuard } from '@/components/auth/AuthGuard'
 
 export default function MoviePage() {
   const params = useParams()
@@ -102,9 +103,9 @@ export default function MoviePage() {
             <div>
               <h1 className="text-4xl font-bold mb-2">{movie.title}</h1>
               <div className="flex flex-wrap gap-2 mb-4">
-                {movie.genres.map((genre) => (
-                  <Badge key={genre} variant="secondary">
-                    {genre}
+                {movie.genres.map((genre, index) => (
+                  <Badge key={index} variant="secondary">
+                    {String(genre)}
                   </Badge>
                 ))}
               </div>

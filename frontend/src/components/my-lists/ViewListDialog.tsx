@@ -41,7 +41,7 @@ export const ViewListDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[720px] h-[80vh]">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>{list?.title}</DialogTitle>
           <DialogDescription>{list?.description}</DialogDescription>

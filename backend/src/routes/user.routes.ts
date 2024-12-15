@@ -1,11 +1,11 @@
 // src/routes/userProfileRoutes.ts
 import { Router, Request, Response, NextFunction } from "express";
-import { UserProfileController } from "../controllers/userProfileController";
+import { UserController } from "../controllers/userController";
 import { body } from "express-validator";
 import { validationResult } from "express-validator";
 
 const router = Router();
-const userProfileController = new UserProfileController();
+const userProfileController = new UserController();
 
 // Inline validation middleware
 const validateRequest = (req: Request, res: Response, next: NextFunction): void => {
@@ -17,14 +17,13 @@ const validateRequest = (req: Request, res: Response, next: NextFunction): void 
   }
 };
 
-// Wrapper function for getUserProfile
-router.get("/userId:", (req: Request, res: Response, next: NextFunction) => {
-  userProfileController.getUserProfile(req, res).catch(next);
+router.get("/id=:id", (req: Request, res: Response, next: NextFunction) => {
+  userProfileController.getUserById(req, res).catch(next);
 });
 
-// Wrapper function for updateUserProfile
+// Update user
 router.put(
-  "/userId:",
+  "/id=:id",
   [
     body("name")
       .optional()
@@ -36,7 +35,7 @@ router.put(
   ],
   validateRequest,
   (req: Request, res: Response, next: NextFunction) => {
-    userProfileController.updateUserProfile(req, res).catch(next);
+    userProfileController.updateUser(req, res).catch(next);
   }
 );
 

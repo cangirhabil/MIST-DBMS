@@ -1,8 +1,9 @@
+import { User } from '@/types/user'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 interface AuthState {
-  user: any | null
+  user: User | null
   token: string | null
   setAuth: (user: any, token: string) => void
   clearAuth: () => void

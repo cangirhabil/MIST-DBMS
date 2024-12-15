@@ -1,20 +1,24 @@
 // app/providers/UserProvider.tsx
 'use client'
 
-import { getUserProfile } from '@/services/user.service'
+import { userService } from '@/services/user.service'
 import { useUserStore } from '@/store/user'
+import { useAuthStore } from '@/store/auth'
 import { useEffect } from 'react'
+
 
 async function getCurrentUser() {
   try {
-    const response = await getUserProfile()
+    const userId = useAuthStore.getState().user?.id
+    if (!userId) return null
+    const response = await userService.getUserProfile(userId)
     return response
   } catch (error) {
     console.error('Kullanıcı alınırken hata oluştu:', error)
     return null
   }
 }
-
+ 
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const setCurrentUser = useUserStore((state) => state.setCurrentUser)
 
@@ -27,5 +31,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     fetchUser()
   }, [setCurrentUser])
 
-  return <>{children}</>
-}
+  return(
+     <>{children}</>
+  )
+    }

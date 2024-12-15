@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useToast } from '@/hooks/use-toast'
 import dynamic from 'next/dynamic'
 import MovieSearch from '@/components/search/index'
+import { AuthGuard } from '@/components/auth/AuthGuard'
 
 const Lottie = dynamic(() => import('lottie-react'), {
   ssr: false,

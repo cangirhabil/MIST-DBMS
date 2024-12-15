@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 import { toast } from '@/hooks/use-toast'
 import { updatePassword } from '@/services/auth.service'
-import { getUserProfile, updateUserProfile } from '@/services/user.service'
+import { userService } from '@/services/user.service'
+import { useAuthStore } from '@/store/auth' // Add this import
 
 interface LoadingState {
   name: boolean
@@ -45,11 +46,20 @@ export const useAccountSettingsStore = create<AccountSettingsStore>((set, get) =
 
   fetchUserProfile: async () => {
     const { setLoading, setUserProfile } = get()
+    const userId = useAuthStore.getState().user?.id
+
+    if (!userId) {
+      toast({
+        title: 'Hata',
+        description: 'Kullanıcı kimliği bulunamadı',
+        variant: 'destructive',
+      })
+      return
+    }
 
     try {
       setLoading('initial', true)
-      const profile = await getUserProfile()
-      console.log('profile', profile)
+      const profile = await userService.getUserProfile(userId)
       setUserProfile(profile)
     } catch (error) {
       toast({
@@ -65,19 +75,24 @@ export const useAccountSettingsStore = create<AccountSettingsStore>((set, get) =
 
   updateName: async (data) => {
     const { setLoading, setUserProfile } = get()
+    const userId = useAuthStore.getState().user?.id
+
+    if (!userId) {
+      toast({
+        title: 'Hata',
+        description: 'Kullanıcı kimliği bulunamadı',
+        variant: 'destructive',
+      })
+      return
+    }
 
     try {
       setLoading('name', true)
-      await updateUserProfile({
-        username: data.username,
-        surname: data.surname,
+      const updatedProfile = await userService.updateUserProfile(userId, {
+        name: `${data.username} ${data.surname}`,
       })
 
-      // Başarılı API çağrısından sonra yerel durumu güncelle
-      setUserProfile({
-        username: data.username,
-        surname: data.surname,
-      })
+      setUserProfile(updatedProfile)
 
       toast({
         title: 'Başarılı',
@@ -95,6 +110,7 @@ export const useAccountSettingsStore = create<AccountSettingsStore>((set, get) =
     }
   },
 
+  // updatePassword remains unchanged
   updatePassword: async (data) => {
     const { setLoading } = get()
 
