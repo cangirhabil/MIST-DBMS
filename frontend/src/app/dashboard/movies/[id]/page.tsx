@@ -1,4 +1,3 @@
-// app/movies/[id]/page.tsx
 'use client'
 
 import { useParams } from 'next/navigation'
@@ -7,64 +6,44 @@ import { Badge } from '@/components/ui/badge'
 import { Clock, Star, Calendar, User, ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
-import { AuthGuard } from '@/components/auth/AuthGuard'
+import { useEffect, useState } from 'react'
 
 export default function MoviePage() {
   const params = useParams()
   const router = useRouter()
   const movieId = Number(params.id)
+  const [movie, setMovie] = useState<Movie | null>(null)
+  const [loading, setLoading] = useState(true)
 
-  const movies: Movie[] = [
-    {
-      id: 1,
-      title: 'Inception',
-      releaseYear: 2010,
-      posterUrl: 'https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg',
-      rating: 8.8,
-      genres: ['Sci-Fi', 'Action'],
-      director: 'Christopher Nolan',
-      duration: 148,
-      overview: 'A thief who steals corporate secrets through dream-sharing technology...',
-    },
-    {
-      id: 2,
-      title: 'The Matrix',
-      releaseYear: 1999,
-      posterUrl: 'https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg',
-      rating: 8.7,
-      genres: ['Sci-Fi', 'Action'],
-      director: 'Lana Wachowski, Lilly Wachowski',
-      duration: 136,
-      overview:
-        'A computer hacker learns from mysterious rebels about the true nature of his reality...',
-    },
-    {
-      id: 3,
-      title: 'Interstellar',
-      releaseYear: 2014,
-      posterUrl: 'https://image.tmdb.org/t/p/w500/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg',
-      rating: 8.6,
-      genres: ['Sci-Fi', 'Adventure'],
-      director: 'Christopher Nolan',
-      duration: 169,
-      overview:
-        "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival...",
-    },
-    {
-      id: 4,
-      title: 'The Dark Knight',
-      releaseYear: 2008,
-      posterUrl: 'https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg',
-      rating: 9.0,
-      genres: ['Action', 'Crime', 'Drama'],
-      director: 'Christopher Nolan',
-      duration: 152,
-      overview:
-        'When the menace known as the Joker emerges from his mysterious past, he wreaks havoc and chaos on the people of Gotham...',
-    },
-  ]
+  useEffect(() => {
+    const fetchMovie = async () => {
+      try {
+        const storedMovie = localStorage.getItem('selectedMovie')
+        if (storedMovie) {
+          const parsedMovie = JSON.parse(storedMovie)
+          if (parsedMovie.id === movieId) {
+            setMovie(parsedMovie)
+            setLoading(false)
+            return
+          }
+        }
 
-  const movie = movies.find((m) => m.id === movieId)
+        const response = await fetch(`/api/movies/${movieId}`)
+        const data = await response.json()
+        setMovie(data)
+      } catch (error) {
+        console.error('Error fetching movie:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchMovie()
+  }, [movieId])
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
 
   if (!movie) {
     return (
@@ -87,7 +66,6 @@ export default function MoviePage() {
         </Button>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Left Column - Poster */}
           <div className="md:col-span-1">
             <div className="sticky top-8">
               <img
@@ -98,7 +76,6 @@ export default function MoviePage() {
             </div>
           </div>
 
-          {/* Right Column - Details */}
           <div className="md:col-span-2 space-y-6">
             <div>
               <h1 className="text-4xl font-bold mb-2">{movie.title}</h1>
@@ -111,7 +88,6 @@ export default function MoviePage() {
               </div>
             </div>
 
-            {/* Key Information */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-muted-foreground" />
@@ -131,13 +107,11 @@ export default function MoviePage() {
               </div>
             </div>
 
-            {/* Overview */}
             <div className="bg-card rounded-lg p-6 shadow-sm">
               <h2 className="text-2xl font-semibold mb-4">Overview</h2>
               <p className="text-lg leading-relaxed text-muted-foreground">{movie.overview}</p>
             </div>
 
-            {/* Technical Details */}
             <div className="bg-card rounded-lg p-6 shadow-sm">
               <h2 className="text-2xl font-semibold mb-4">Movie Details</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
