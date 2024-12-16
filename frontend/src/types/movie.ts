@@ -10,6 +10,6 @@ export interface Movie {
   duration?: number 
   overview?: string 
   genres: Genre[]
-  createdAt: Date
-  updatedAt: Date
+  createdAt?: Date
+  updatedAt?: Date
 }
