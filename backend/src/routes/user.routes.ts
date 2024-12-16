@@ -17,13 +17,16 @@ const validateRequest = (req: Request, res: Response, next: NextFunction): void 
   }
 };
 
-router.get("/id=:id", (req: Request, res: Response, next: NextFunction) => {
-  userProfileController.getUserById(req, res).catch(next);
-});
+router.get(
+  "/getUser/id=:id",
+  (req: Request, res: Response, next: NextFunction) => {
+    userProfileController.getUserById(req, res).catch(next);
+  }
+);
 
 // Update user
 router.put(
-  "/id=:id",
+  "/updateUser/id=:id",
   [
     body("name")
       .optional()
@@ -39,4 +42,24 @@ router.put(
   }
 );
 
+
+router.put(
+  "/updatePassword/id=:id",
+  [
+    body("currentPassword")
+      .isString()
+      .notEmpty()
+      .withMessage("Current password is required"),
+    body("newPassword")
+      .isString()
+      .notEmpty()
+      .withMessage("New password is required"),
+  ],
+  validateRequest,
+  (req: Request, res: Response, next: NextFunction) => {
+    userProfileController.updatePassword(req, res).catch(next);
+  }
+);
+
 export default router;
+// Update password

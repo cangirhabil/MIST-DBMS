@@ -1,5 +1,42 @@
 'use client'
 
+// First, move the useUserUpdates hook outside of the component
+function useUserUpdates() {
+  const userId = useAuthStore.getState().user?.id
+
+  const handleUpdateUserProfile = async (data: { name: string; surname: string }) => {
+    if (!userId) throw new Error('User ID not found')
+
+    try {
+      await userService.updateUserProfile(userId, {
+        name: `${data.name} ${data.surname}`,
+      })
+    } catch (error) {
+      console.error('Failed to update profile:', error)
+      throw error
+    }
+  }
+
+  const handleUpdatePassword = async (currentPassword: string, newPassword: string) => {
+    if (!userId) throw new Error('User ID not found')
+
+    try {
+      await userService.updatePassword(userId, currentPassword, newPassword)
+    } catch (error) {
+      console.error('Failed to update password:', error)
+      throw error
+    }
+  }
+
+  return {
+    handleUpdateUserProfile,
+    handleUpdatePassword,
+  }
+}
+
+import { userService } from '@/services/user.service'
+import { useAuthStore } from '@/store/auth'
+
 import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -43,6 +80,28 @@ const passwordSchema = z
 export default function AccountSettings() {
   const { isLoading, userProfile, fetchUserProfile, updateName, updatePassword } =
     useAccountSettingsStore()
+  const userUpdates = useUserUpdates()
+
+  // Modify handleUpdateName function
+  const handleUpdateName = async (data: z.infer<typeof nameSchema>) => {
+    try {
+      await userUpdates.handleUpdateUserProfile({ name: data.username, surname: data.surname })
+      await updateName(data)
+    } catch (error) {
+      console.error('Error updating name:', error)
+    }
+  }
+
+  // Modify handleResetPassword function
+  const handleResetPassword = async (data: z.infer<typeof passwordSchema>) => {
+    try {
+      await userUpdates.handleUpdatePassword(data.currentPassword, data.newPassword)
+      await updatePassword(data)
+      passwordForm.reset()
+    } catch (error) {
+      console.error('Error updating password:', error)
+    }
+  }
 
   const nameForm = useForm({
     resolver: zodResolver(nameSchema),
@@ -74,13 +133,37 @@ export default function AccountSettings() {
     }
   }, [userProfile, nameForm])
 
-  const handleUpdateName = async (data: z.infer<typeof nameSchema>) => {
-    await updateName(data)
-  }
+  function useUserUpdates() {
+    const userId = useAuthStore.getState().user?.id
 
-  const handleResetPassword = async (data: z.infer<typeof passwordSchema>) => {
-    await updatePassword(data)
-    passwordForm.reset()
+    const handleUpdateUserProfile = async (data: { name: string; surname: string }) => {
+      if (!userId) throw new Error('User ID not found')
+
+      try {
+        await userService.updateUserProfile(userId, {
+          name: `${data.name} ${data.surname}`,
+        })
+      } catch (error) {
+        console.error('Failed to update profile:', error)
+        throw error
+      }
+    }
+
+    const handleUpdatePassword = async (currentPassword: string, newPassword: string) => {
+      if (!userId) throw new Error('User ID not found')
+
+      try {
+        await userService.updatePassword(userId, currentPassword, newPassword)
+      } catch (error) {
+        console.error('Failed to update password:', error)
+        throw error
+      }
+    }
+
+    return {
+      handleUpdateUserProfile,
+      handleUpdatePassword,
+    }
   }
 
   if (isLoading.initial) {

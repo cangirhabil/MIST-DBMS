@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-
+import { comparePassword, hashPassword } from "../utils/passwordUtils";
 const prisma = new PrismaClient();
 
 export class UserController {
-
   async getUserById(req: Request, res: Response) {
     try {
       const userId = req.params.id;
@@ -33,31 +32,12 @@ export class UserController {
   async updateUser(req: Request, res: Response) {
     try {
       const userId = req.params.id;
-      const { name, email, password } = req.body;
-
-      // First, check if user exists and verify password
-      const existingUser = await prisma.user.findUnique({
-        where: { id: userId },
-        select: {
-          id: true,
-          password: true,
-        },
-      });
-
-      if (!existingUser) {
-        return res.status(404).json({ message: "User not found" });
-      }
-
-      // Compare passwords (assuming you're using bcrypt or similar)
-      if (existingUser.password !== password) {
-        return res.status(401).json({ message: "Invalid password" });
-      }
+      const { name } = req.body;
 
       const updatedUser = await prisma.user.update({
         where: { id: userId },
         data: {
           name: name,
-          email: email,
         },
         select: {
           id: true,
@@ -80,4 +60,57 @@ export class UserController {
       });
     }
   }
+
+  async updatePassword(req: Request, res: Response) {
+    try {
+      const userId = req.params.id;
+      const { currentPassword, newPassword } = req.body;
+
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+          id: true,
+          password: true,
+        },
+      });
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Use comparePassword from passwordUtils
+      const isPasswordValid = await comparePassword(
+        currentPassword,
+        user.password
+      );
+      if (!isPasswordValid) {
+        return res
+          .status(401)
+          .json({ message: "Current password is incorrect" });
+      }
+
+      // Hash the new password before saving
+      const hashedPassword = await hashPassword(newPassword);
+      const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: {
+          password: hashedPassword,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      return res.status(200).json({ message: "Password updated successfully" });
+    } catch (error) {
+      return res.status(500).json({
+        error: "Failed to update password",
+        details: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
+  }
 }
+
+
+
+

@@ -116,10 +116,10 @@ export const useAccountSettingsStore = create<AccountSettingsStore>((set, get) =
 
     try {
       setLoading('password', true)
-      const response = await updatePassword(data.currentPassword, data.newPassword)
+      const response = await updatePassword(data.currentPassword, data.newPassword, data.confirmPassword)
       toast({
         title: 'Başarılı',
-        description: response,
+        description: response.message,
         variant: 'default',
       })
     } catch (error) {

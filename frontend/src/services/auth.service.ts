@@ -75,17 +75,49 @@ export const loginWithEmailAndPassword = async (
   }
 }
 
-export const updatePassword = async (oldPassword: string, newPassword: string): Promise<string> => {
-  try {
-    await api.post('/auth/update-password', {
-      oldPassword,
-      newPassword,
-    })
+export const updatePassword = async (
+  userId: string,
+  currentPassword: string,
+  newPassword: string
+): Promise<{ success: boolean; message: string }> => {
+  const token = useAuthStore.getState().token
 
-    return 'Şifre başarıyla güncellendi.'
-  } catch (error: any) {
-    console.error('Şifre güncelleme hatası:', error)
-    throw new Error(error.response?.data?.message || 'Şifre güncellenirken bir hata oluştu.')
+  if (!token) {
+    return {
+      success: false,
+      message: 'User is not logged in.',
+    }
+  }
+
+  try {
+    await api.put(
+      `/user/updatePassword/id=${userId}`,
+      {
+        currentPassword,
+        newPassword,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+
+    return {
+      success: true,
+      message: 'Password updated successfully.',
+    }
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to update password',
+      }
+    }
+    return {
+      success: false,
+      message: 'An unexpected error occurred',
+    }
   }
 }
 
