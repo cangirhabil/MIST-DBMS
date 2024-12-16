@@ -117,7 +117,7 @@ export const movieListService = {
     const token = useAuthStore.getState().token
     if (!token) {
       throw Error('User is not logged in.')
-    }
+    } 
 
     try {
       const response = await fetch(

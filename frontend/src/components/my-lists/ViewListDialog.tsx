@@ -63,9 +63,9 @@ export const ViewListDialog = ({
             {filteredMovies?.map((movie) => (
               <MovieItem 
                 key={`${list?.id}-${movie.id}`}
-                movie={movie} 
+                movie={movie}
                 onRemove={handleRemoveMovie}
-              />
+                listId={list?.id || ''}              />
             ))}
             {filteredMovies?.length === 0 && (
               <p className="text-center text-muted-foreground py-4">

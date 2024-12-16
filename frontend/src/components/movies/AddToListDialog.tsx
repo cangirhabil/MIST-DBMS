@@ -41,7 +41,7 @@ export function AddToListDialog({ movie }: AddToListDialogProps) {
         const movieLists = await movieListService.getMovieListsByUserId()
         setLists(
           movieLists.map((list) => ({
-            id: list.id,
+            id: Number(list.id),
             name: list.title,
           })),
         )
