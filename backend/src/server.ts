@@ -2,7 +2,8 @@ import express from "express";
 import cors from "cors";
 import { config } from "./config";
 import authRoutes from "./routes/auth.routes";
-import movieRoutes from "./routes/movieList.routes";
+import movieListRoutes from "./routes/movieList.routes";
+import movieRoutes from "./routes/movie.routes";
 import { errorHandler } from "./middleware/error.middleware";
 import userRoutes from "./routes/user.routes"
 const app = express();
@@ -11,8 +12,9 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/auth", authRoutes);
-app.use("/lists", movieRoutes);
+app.use("/lists", movieListRoutes);
 app.use("/user", userRoutes)
+app.use("/movie", movieRoutes);
 
 app.use(errorHandler);
 

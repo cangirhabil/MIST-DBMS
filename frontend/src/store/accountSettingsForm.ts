@@ -17,7 +17,7 @@ interface AccountSettingsStore {
   setLoading: (type: keyof LoadingState, value: boolean) => void
   setUserProfile: (profile: Record<string, any> | null) => void
   fetchUserProfile: () => Promise<void>
-  updateName: (data: { username: string; surname: string }) => Promise<void>
+  updateName: (data: { username: string;}) => Promise<void>
   updatePassword: (data: {
     currentPassword: string
     newPassword: string
@@ -89,7 +89,7 @@ export const useAccountSettingsStore = create<AccountSettingsStore>((set, get) =
     try {
       setLoading('name', true)
       const updatedProfile = await userService.updateUserProfile(userId, {
-        name: `${data.username} ${data.surname}`,
+        name: `${data.username}`,
       })
 
       setUserProfile(updatedProfile)

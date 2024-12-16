@@ -1,38 +1,6 @@
 'use client'
 
-// First, move the useUserUpdates hook outside of the component
-function useUserUpdates() {
-  const userId = useAuthStore.getState().user?.id
 
-  const handleUpdateUserProfile = async (data: { name: string; surname: string }) => {
-    if (!userId) throw new Error('User ID not found')
-
-    try {
-      await userService.updateUserProfile(userId, {
-        name: `${data.name} ${data.surname}`,
-      })
-    } catch (error) {
-      console.error('Failed to update profile:', error)
-      throw error
-    }
-  }
-
-  const handleUpdatePassword = async (currentPassword: string, newPassword: string) => {
-    if (!userId) throw new Error('User ID not found')
-
-    try {
-      await userService.updatePassword(userId, currentPassword, newPassword)
-    } catch (error) {
-      console.error('Failed to update password:', error)
-      throw error
-    }
-  }
-
-  return {
-    handleUpdateUserProfile,
-    handleUpdatePassword,
-  }
-}
 
 import { userService } from '@/services/user.service'
 import { useAuthStore } from '@/store/auth'
@@ -57,7 +25,6 @@ const Lottie = dynamic(() => import('lottie-react'), {
 // Form validation schemas remain the same
 const nameSchema = z.object({
   username: z.string().min(2, 'İsim en az 2 karakter olmalıdır'),
-  surname: z.string().min(2, 'Soyisim en az 2 karakter olmalıdır'),
 })
 
 const passwordSchema = z
@@ -85,7 +52,7 @@ export default function AccountSettings() {
   // Modify handleUpdateName function
   const handleUpdateName = async (data: z.infer<typeof nameSchema>) => {
     try {
-      await userUpdates.handleUpdateUserProfile({ name: data.username, surname: data.surname })
+      await userUpdates.handleUpdateUserProfile({ name: data.username,})
       await updateName(data)
     } catch (error) {
       console.error('Error updating name:', error)
@@ -107,7 +74,6 @@ export default function AccountSettings() {
     resolver: zodResolver(nameSchema),
     defaultValues: {
       username: '',
-      surname: '',
     },
   })
 
@@ -128,7 +94,6 @@ export default function AccountSettings() {
     if (userProfile) {
       nameForm.reset({
         username: userProfile.name,
-        surname: userProfile.surname,
       })
     }
   }, [userProfile, nameForm])
@@ -136,12 +101,12 @@ export default function AccountSettings() {
   function useUserUpdates() {
     const userId = useAuthStore.getState().user?.id
 
-    const handleUpdateUserProfile = async (data: { name: string; surname: string }) => {
+    const handleUpdateUserProfile = async (data: { name: string;}) => {
       if (!userId) throw new Error('User ID not found')
 
       try {
         await userService.updateUserProfile(userId, {
-          name: `${data.name} ${data.surname}`,
+          name: `${data.name}`,
         })
       } catch (error) {
         console.error('Failed to update profile:', error)
@@ -199,14 +164,6 @@ export default function AccountSettings() {
                     </p>
                   )}
                 </div>
-                <div className="flex-1 space-y-1">
-                  <Input {...nameForm.register('surname')} placeholder="Soyadınızı girin" />
-                  {nameForm.formState.errors.surname && (
-                    <p className="text-sm text-red-500">
-                      {nameForm.formState.errors.surname.message}
-                    </p>
-                  )}
-                </div>
               </div>
               <Button type="submit" disabled={isLoading.name}>
                 {isLoading.name && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
@@ -260,4 +217,40 @@ export default function AccountSettings() {
       </Card>
     </div>
   )
+}
+
+
+
+// First, move the useUserUpdates hook outside of the component
+function useUserUpdates() {
+  const userId = useAuthStore.getState().user?.id
+
+  const handleUpdateUserProfile = async (data: { name: string;}) => {
+    if (!userId) throw new Error('User ID not found')
+
+    try {
+      await userService.updateUserProfile(userId, {
+        name: `${data.name}`,
+      })
+    } catch (error) {
+      console.error('Failed to update profile:', error)
+      throw error
+    }
+  }
+
+  const handleUpdatePassword = async (currentPassword: string, newPassword: string) => {
+    if (!userId) throw new Error('User ID not found')
+
+    try {
+      await userService.updatePassword(userId, currentPassword, newPassword)
+    } catch (error) {
+      console.error('Failed to update password:', error)
+      throw error
+    }
+  }
+
+  return {
+    handleUpdateUserProfile,
+    handleUpdatePassword,
+  }
 }

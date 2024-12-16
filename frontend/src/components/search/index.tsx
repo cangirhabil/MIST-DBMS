@@ -2,7 +2,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useDebounce } from 'use-debounce'
+import { useDebounce } from 'use-debounce' 
 import { MovieCard } from './MovieCard'
 import { Input } from '@/components/ui/input'
 import {
@@ -34,39 +34,42 @@ export default function MovieSearch() {
   const [yearRange, setYearRange] = useState([1900, new Date().getFullYear()])
   const [sortBy, setSortBy] = useState<string>('relevance')
 
-  useEffect(() => {
-    const searchMovies = async () => {
-      if (debouncedQuery.length < 2 && selectedGenre === 'all') return
+useEffect(() => {
+  const searchMovies = async () => {
+    if (debouncedQuery.length < 2 && selectedGenre === 'all') return
 
-      setLoading(true)
-      try {
-        const response = await fetch('/api/search-movies', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            query: debouncedQuery,
-            genre: selectedGenre,
-            yearRange,
-            sortBy,
-          }),
-        })
-
-        if (!response.ok) throw new Error('Search failed')
-
-        const data = await response.json()
-        setMovies(data.movies)
-      } catch (error) {
-        toast.error('Failed to search movies')
-        console.error(error)
-      } finally {
-        setLoading(false)
+    setLoading(true)
+    try {
+      const query = {
+        searchTerm: debouncedQuery,
+        genre: selectedGenre !== 'all' ? selectedGenre : undefined,
+        startYear: yearRange[0],
+        endYear: yearRange[1],
+        sortBy
       }
-    }
+      
+      const queryString = new URLSearchParams(
+        Object.entries(query)
+          .filter(([_, value]) => value !== undefined)
+          .map(([key, value]) => [key, String(value)])
+      ).toString()
 
-    searchMovies()
-  }, [debouncedQuery, selectedGenre, yearRange, sortBy])
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/movies/search${queryString}`)
+      
+      if (!response.ok) throw new Error('Search failed')
+      
+      const data = await response.json()
+      setMovies(data.results || [])
+    } catch (error) {
+      toast.error('Failed to search movies')
+      console.error(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  searchMovies()
+}, [debouncedQuery, selectedGenre, yearRange, sortBy])
 
   return (
     <div className="container mx-auto px-4 py-8">
