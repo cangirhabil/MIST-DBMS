@@ -1,3 +1,4 @@
+// /dashboard/movies[id]/page.tsx
 'use client'
 
 import { useParams } from 'next/navigation'
@@ -7,6 +8,7 @@ import { Clock, Star, Calendar, User, ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { MovieActions } from '@/components/movies/MovieActions'
 
 export default function MoviePage() {
   const params = useParams()
@@ -67,12 +69,13 @@ export default function MoviePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="md:col-span-1">
-            <div className="sticky top-8">
+            <div className="sticky top-8 space-y-4">
               <img
                 src={movie.posterUrl}
                 alt={movie.title}
                 className="w-full rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300"
               />
+              <MovieActions movie={movie} />
             </div>
           </div>
 
