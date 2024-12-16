@@ -1,7 +1,7 @@
 // components/AddToListDialog.tsx
 'use client'
-
-import { useState } from 'react'
+import { movieListService } from '@/services/movieList.service'
+import { useState, useEffect } from 'react'
 import { Movie } from '@/types/Movie'
 import { Button } from '@/components/ui/button'
 import {
@@ -16,6 +16,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Plus, Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useToast } from '@/hooks/use-toast'
+
 
 interface AddToListDialogProps {
   movie: Movie
@@ -32,30 +33,33 @@ export function AddToListDialog({ movie }: AddToListDialogProps) {
   const [isLoading, setIsLoading] = useState<number | null>(null)
   const { toast } = useToast()
 
-  // Mock data - gerçek uygulamada API'den gelecek
-  const movieLists: MovieList[] = [
-    { id: 1, name: 'Favori Filmler' },
-    { id: 2, name: 'İzlenecekler' },
-    { id: 3, name: 'En İyiler' },
-    { id: 4, name: 'Aksiyon Filmleri' },
-    { id: 5, name: 'Drama' },
-  ]
+  const [lists, setLists] = useState<MovieList[]>([])
+
+  useEffect(() => {
+    const fetchLists = async () => {
+      try {
+        const movieLists = await movieListService.getMovieListsByUserId()
+        setLists(
+          movieLists.map((list) => ({
+            id: list.id,
+            name: list.title,
+          })),
+        )
+      } catch (error) {
+        toast({
+          title: 'Hata',
+          description: 'Listeler yüklenirken bir hata oluştu.',
+          variant: 'destructive',
+        })
+      }
+    }
+    fetchLists()
+  }, [])
 
   const handleAddToList = async (listId: number) => {
     try {
       setIsLoading(listId)
-
-      // Gerçek API çağrısı burada yapılacak
-      // await fetch(`/api/lists/${listId}/movies`, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({ movieId: movie.id }),
-      // })
-
-      // Simüle edilmiş gecikme
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await movieListService.addMovieToList(String(listId), movie.id)
 
       setSelectedList(listId)
       toast({
@@ -94,7 +98,7 @@ export function AddToListDialog({ movie }: AddToListDialogProps) {
         </DialogHeader>
         <ScrollArea className="max-h-[60vh] mt-4 pr-4">
           <div className="flex flex-col gap-2">
-            {movieLists.map((list) => (
+            {lists.map((list) => (
               <Button
                 key={list.id}
                 variant="ghost"
