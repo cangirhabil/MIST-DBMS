@@ -40,7 +40,6 @@ model MovieList {
   id          String   @id @default(cuid())
   title       String
   description String
-  movieCount  Int
   createdAt   DateTime @default(now())
   movies      Movie[]  @relation("MovieListMovies")
   user        User     @relation("UserLists", fields: [userId], references: [id])

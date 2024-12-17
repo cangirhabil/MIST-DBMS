@@ -75,9 +75,6 @@ export class MovieListController {
           movies: {
             connect: { id: parseInt(movieId) },
           },
-          movieCount: {
-            increment: 1,
-          },
         },
         include: {
           movies: true,
@@ -102,9 +99,6 @@ export class MovieListController {
           movies: {
             disconnect: { id: parseInt(movieId) },
           },
-          movieCount: {
-            decrement: 1,
-          },
         },
         include: {
           movies: true,
@@ -128,7 +122,6 @@ export class MovieListController {
           title,
           description,
           userId,
-          movieCount: 0,
         },
         include: {
           movies: true,
