@@ -1,23 +1,21 @@
 import { Router } from "express";
-import { MovieListController } from "../controllers/movieListController";
+import { MovieWatchedListController } from "../controllers/movieWatchedListController";
 
 const router = Router();
-const movieListController = new MovieListController();
+const movieWatchedListController = new MovieWatchedListController();
 
-router.get(
-  "/getMovieLists/userId=:id",
-  movieListController.getMovieListsByUserId
-);
-router.delete("/deleteMovieList/:id", movieListController.deleteMovieList);
-router.put("/updateMovieList/:id", movieListController.updateMovieListTitle);
+// Define routes
 router.post(
-  "/addMovieToList/:listId/:movieId",
-  movieListController.addMovieToList
+  "/users/:userId/watched",
+  movieWatchedListController.addMovieToWatchedList
 );
 router.delete(
-  "/removeMovieFromList/:listId/:movieId",
-  movieListController.removeMovieFromList
+  "/watched/:id",
+  movieWatchedListController.removeMovieFromWatchedList
 );
-router.post("/createMovieList", movieListController.createMovieList);
+router.get(
+  "/users/:userId/watched",
+  movieWatchedListController.getWatchedMoviesByUserId
+);
 
 export default router;
