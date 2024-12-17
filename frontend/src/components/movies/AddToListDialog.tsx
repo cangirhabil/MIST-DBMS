@@ -23,14 +23,14 @@ interface AddToListDialogProps {
 }
 
 interface MovieList {
-  id: number
+  id: string
   name: string
 }
 
 export function AddToListDialog({ movie }: AddToListDialogProps) {
-  const [selectedList, setSelectedList] = useState<number | null>(null)
+  const [selectedList, setSelectedList] = useState<string | null>(null)
   const [isOpen, setIsOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState<number | null>(null)
+  const [isLoading, setIsLoading] = useState<string | null>(null)
   const { toast } = useToast()
 
   const [lists, setLists] = useState<MovieList[]>([])
@@ -39,9 +39,11 @@ export function AddToListDialog({ movie }: AddToListDialogProps) {
     const fetchLists = async () => {
       try {
         const movieLists = await movieListService.getMovieListsByUserId()
+
+        console.log(movieLists)
         setLists(
           movieLists.map((list) => ({
-            id: Number(list.id),
+            id: list.id,
             name: list.title,
           })),
         )
@@ -56,10 +58,10 @@ export function AddToListDialog({ movie }: AddToListDialogProps) {
     fetchLists()
   }, [])
 
-  const handleAddToList = async (listId: number) => {
+  const handleAddToList = async (listId: string) => {
     try {
       setIsLoading(listId)
-      await movieListService.addMovieToList(String(listId), movie.id)
+      await movieListService.addMovieToList(listId, movie.id)
 
       setSelectedList(listId)
       toast({

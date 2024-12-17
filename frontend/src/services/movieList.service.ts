@@ -88,6 +88,7 @@ export const movieListService = {
   },
 
   async addMovieToList(listId: string, movieId: number): Promise<MovieList> {
+  console.log(listId, movieId)
     const token = useAuthStore.getState().token
     if (!token) {
       throw Error('User is not logged in.')
