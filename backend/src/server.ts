@@ -6,6 +6,8 @@ import movieListRoutes from "./routes/movieList.routes";
 import movieRoutes from "./routes/movie.routes";
 import { errorHandler } from "./middleware/error.middleware";
 import userRoutes from "./routes/user.routes"
+import movieWatchedListRoutes from "./routes/movieWatchedList.routes"
+
 const app = express();
 
 app.use(cors());
@@ -15,6 +17,7 @@ app.use("/auth", authRoutes);
 app.use("/lists", movieListRoutes);
 app.use("/user", userRoutes)
 app.use("/movie", movieRoutes);
+app.use("/watched", movieWatchedListRoutes)
 
 app.use(errorHandler);
 

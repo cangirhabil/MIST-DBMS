@@ -44,6 +44,23 @@ CREATE TABLE "MovieList" (
 );
 
 -- CreateTable
+CREATE TABLE "MovieWatchedList" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "movieId" INTEGER NOT NULL,
+    "title" TEXT NOT NULL,
+    "releaseYear" INTEGER NOT NULL,
+    "posterUrl" TEXT,
+    "rating" DOUBLE PRECISION,
+    "director" TEXT,
+    "duration" INTEGER,
+    "overview" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "MovieWatchedList_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "_MovieListMovies" (
     "A" INTEGER NOT NULL,
     "B" TEXT NOT NULL,
@@ -61,6 +78,9 @@ CREATE TABLE "_MovieGenres" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "MovieWatchedList_userId_movieId_key" ON "MovieWatchedList"("userId", "movieId");
 
 -- CreateIndex
 CREATE INDEX "_MovieListMovies_B_index" ON "_MovieListMovies"("B");

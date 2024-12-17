@@ -45,3 +45,18 @@ model MovieList {
   user        User     @relation("UserLists", fields: [userId], references: [id])
   userId      String
 }
+
+model MovieWatchedList {
+  id        String   @id @default(cuid())
+  userId    String
+  movieId   Int
+  title       String
+  releaseYear Int
+  posterUrl   String?  
+  rating      Float?   
+  director    String?  
+  duration    Int?     
+  overview    String?  
+  createdAt DateTime @default(now()) // İzlenme tarihi olarak kullanılabilir
+  @@unique([userId, movieId]) // Bir kullanıcı aynı filmi iki kez izlendi olarak işaretleyemesin
+}
