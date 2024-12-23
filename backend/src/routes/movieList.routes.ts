@@ -5,7 +5,7 @@ const router = Router();
 const movieListController = new MovieListController();
 
 router.get(
-  "/getMovieLists/userId=:id",
+  "/getMovieLists/userId=:userId",
   movieListController.getMovieListsByUserId
 );
 router.delete("/deleteMovieList/:id", movieListController.deleteMovieList);

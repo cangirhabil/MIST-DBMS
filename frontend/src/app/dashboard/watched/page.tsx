@@ -84,7 +84,7 @@ const Rate: React.FC = () => {
                 <div className="mt-2 flex items-center justify-between">
                   <div>
                     <span className="text-yellow-400">★</span>
-                    <span className="text-white ml-1">{movie.rating}/5</span>
+                    <span className="text-white ml-1">{movie.rating}/10</span>
                   </div>
                   <button
                     onClick={() => handleDeleteMovie(movie.id)}

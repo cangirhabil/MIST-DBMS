@@ -1,30 +1,29 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { checkIsAdmin } from './services/auth.service'
 
 export async function middleware(request: NextRequest) {
-  // Admin sayfaları için middleware kontrolü
-  if (request.nextUrl.pathname.startsWith('/admin')) {
-    const session = request.cookies.get('session')?.value
+  const token = request.cookies.get('auth-storage')?.value
+  const isHomePage = request.nextUrl.pathname === '/'
 
-    // todo: Admin kontrolü yapılacak server tarafında da
-
-    // const isAdmin = await checkIsAdmin();
-
-    if (!session) {
-      return NextResponse.redirect(new URL('/auth', request.url))
-    }
-
-    // Session token'ı kontrol etme işlemleri burada yapılır
-    // Bu örnekte basit bir kontrol yapıyoruz
-    try {
-      return NextResponse.next()
-    } catch (error) {
-      return NextResponse.redirect(new URL('/auth', request.url))
-    }
+  // Eğer token yoksa ve ana sayfa veya auth sayfası değilse, ana sayfaya yönlendir
+  if (!token && !isHomePage) {
+    return NextResponse.redirect(new URL('/', request.url))
   }
+
+  return NextResponse.next()
 }
 
 export const config = {
-  matcher: '/admin/:path*',
+  matcher: [
+    '/',
+    /*
+    
+     * Aşağıdaki yollarla başlayanlar HARİÇ tüm istekleri eşleştirir:
+     * - api (API rotaları)
+     * - _next/static (statik dosyalar)
+     * - _next/image (resim optimizasyon dosyaları)
+     * - favicon.ico (favicon dosyası)
+     * '/((?!api|_next/static|_next/image|favicon.ico).*)',
+     */
+  ],
 }
