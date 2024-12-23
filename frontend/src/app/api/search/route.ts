@@ -2,7 +2,8 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { handleApiError, ApiError } from '@/lib/error'
-import type { Movie, SearchParams } from '@/types/Movie'
+import type { Movie,  } from '@/types/Movie'
+import { SearchParams } from '@/types/SearchParams'
 
 export async function POST(request: Request) {
   try {

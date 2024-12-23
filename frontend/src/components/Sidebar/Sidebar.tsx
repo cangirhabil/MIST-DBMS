@@ -24,6 +24,7 @@ export const Sidebar: FC = () => {
     name: currentUser?.name || '',
     email: currentUser?.email || '',
     password: '',
+    id: ''
   }
 
   const pathname = usePathname() // Mevcut yol adını al

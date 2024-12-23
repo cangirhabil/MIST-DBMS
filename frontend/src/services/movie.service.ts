@@ -1,6 +1,4 @@
 import { Movie } from '../types/Movie'
-import { MovieList } from '../types/MovieList'
-import useAuthStore from '@/store/auth'
 
 const API_BASE_URL = process.env.API_URL || 'http://localhost:3003'
 
@@ -59,7 +57,7 @@ export const movieService = {
 
       // Transform the response to match the expected format
       const transformedData: SearchMoviesResponse = {
-        results: data.results.map((movie: sss) => ({
+        results: data.results.map((movie: MovieResponse) => ({
           id: movie.id,
           title: movie.title,
           releaseYear: movie.releaseYear,
