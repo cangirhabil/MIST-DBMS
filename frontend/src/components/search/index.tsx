@@ -1,5 +1,8 @@
+// components/MovieSearch.tsx
+'use client'
+
 import { movieService } from '@/services/movie.service'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useDebounce } from 'use-debounce'
 import { MovieCard } from './MovieCard'
 import { Input } from '@/components/ui/input'
@@ -11,39 +14,21 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Slider } from '@/components/ui/slider'
-import type { Movie } from '@/types/movie'
+import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
+import type { Movie } from '@/types/movie'
 
-const LoadingSkeleton = () => {
-  return (
-    <div className="rounded-lg border border-border p-4 space-y-3">
-      <div className="w-full h-48 bg-muted animate-pulse rounded-md" />
-      <div className="space-y-2">
-        <div className="h-4 bg-muted animate-pulse rounded w-3/4" />
-        <div className="h-4 bg-muted animate-pulse rounded w-1/2" />
-        <div className="h-4 bg-muted animate-pulse rounded w-2/3" />
-      </div>
-    </div>
-  );
-};
+const CURRENT_YEAR = new Date().getFullYear()
 
-const LoadingGrid = () => {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {[...Array(8)].map((_, index) => (
-        <LoadingSkeleton key={index} />
-      ))}
-    </div>
-  );
-};
-
-const genres = ['All', 'Action', 'Comedy', 'Drama', 'Sci-Fi', 'Horror', 'Romance']
-const sortOptions = [
+const GENRES = ['All', 'Action', 'Comedy', 'Drama', 'Sci-Fi', 'Horror', 'Romance']
+const SORT_OPTIONS = [
   { value: 'relevance', label: 'Relevance' },
   { value: 'year', label: 'Release Year' },
   { value: 'rating', label: 'Rating' },
   { value: 'title', label: 'Title' },
-]
+] as const
+
+type SortOption = typeof SORT_OPTIONS[number]['value']
 
 export default function MovieSearch() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -51,35 +36,55 @@ export default function MovieSearch() {
   const [movies, setMovies] = useState<Movie[]>([])
   const [loading, setLoading] = useState(false)
   const [selectedGenre, setSelectedGenre] = useState<string>('all')
-  const [yearRange, setYearRange] = useState([1900, new Date().getFullYear()])
-  const [sortBy, setSortBy] = useState<string>('relevance')
+  const [yearRange, setYearRange] = useState([1900, CURRENT_YEAR])
+  const [sortBy, setSortBy] = useState<SortOption>('relevance')
 
-  useEffect(() => {
-    const searchMovies = async () => {
-      if (debouncedQuery.length < 2 && selectedGenre === 'all') return
-
-      setLoading(true)
-      try {
-        const searchParams = {
-          searchTerm: debouncedQuery,
-          genre: selectedGenre !== 'all' ? selectedGenre : undefined,
-          startYear: yearRange[0],
-          endYear: yearRange[1],
-          sortBy: sortBy as 'relevance' | 'year' | 'rating' | 'title',
-        }
-
-        const response = await movieService.searchMovies(searchParams)
-        setMovies(response.results)
-      } catch (error) {
-        toast.error('Failed to search movies')
-        console.error(error)
-      } finally {
-        setLoading(false)
-      }
+  const searchMovies = useCallback(async () => {
+    if (debouncedQuery.length < 2 && selectedGenre === 'all') {
+      setMovies([])
+      return
     }
 
-    searchMovies()
+    setLoading(true)
+    try {
+      const searchParams = {
+        searchTerm: debouncedQuery,
+        genre: selectedGenre !== 'all' ? selectedGenre : undefined,
+        startYear: yearRange[0],
+        endYear: yearRange[1],
+        sortBy,
+      }
+
+      const response = await movieService.searchMovies(searchParams)
+      setMovies(response.results)
+    } catch (error) {
+      toast.error('Failed to search movies')
+      console.error('Movie search error:', error)
+      setMovies([])
+    } finally {
+      setLoading(false)
+    }
   }, [debouncedQuery, selectedGenre, yearRange, sortBy])
+
+  useEffect(() => {
+    searchMovies()
+  }, [searchMovies])
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value)
+  }
+
+  const handleGenreChange = (value: string) => {
+    setSelectedGenre(value)
+  }
+
+  const handleSortChange = (value: SortOption) => {
+    setSortBy(value)
+  }
+
+  const handleYearRangeChange = (value: number[]) => {
+    setYearRange(value)
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -89,27 +94,27 @@ export default function MovieSearch() {
           <Input
             placeholder="Search movies..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleSearchChange}
             className="md:col-span-2"
           />
-          <Select value={selectedGenre} onValueChange={setSelectedGenre}>
+          <Select value={selectedGenre} onValueChange={handleGenreChange}>
             <SelectTrigger>
               <SelectValue placeholder="Genre" />
             </SelectTrigger>
             <SelectContent>
-              {genres.map((genre) => (
+              {GENRES.map((genre) => (
                 <SelectItem key={genre.toLowerCase()} value={genre.toLowerCase()}>
                   {genre}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          <Select value={sortBy} onValueChange={setSortBy}>
+          <Select value={sortBy} onValueChange={handleSortChange}>
             <SelectTrigger>
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
-              {sortOptions.map((option) => (
+              {SORT_OPTIONS.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>
@@ -123,10 +128,10 @@ export default function MovieSearch() {
           <label className="text-sm font-medium">Year Range</label>
           <Slider
             min={1900}
-            max={new Date().getFullYear()}
+            max={CURRENT_YEAR}
             step={1}
             value={yearRange}
-            onValueChange={setYearRange}
+            onValueChange={handleYearRangeChange}
             className="my-4"
           />
           <div className="flex justify-between text-sm text-muted-foreground">
@@ -137,15 +142,17 @@ export default function MovieSearch() {
 
         {/* Results */}
         {loading ? (
-          <LoadingGrid />
+          <div className="flex justify-center py-8">
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </div>
         ) : movies.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {movies.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
             ))}
           </div>
         ) : (
-          <div className="text-center py-8 text-muted-foreground">
+          <div className="py-8 text-center text-muted-foreground">
             {debouncedQuery.length > 0 ? 'No movies found' : 'Start typing to search movies'}
           </div>
         )}
