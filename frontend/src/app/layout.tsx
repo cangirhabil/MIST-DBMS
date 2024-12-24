@@ -17,3 +17,13 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 }
 
 export const useUser = () => useContext(UserContext)
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html>
+      <body>
+        <UserProvider>{children}</UserProvider>
+      </body>
+    </html>
+  )
+}
