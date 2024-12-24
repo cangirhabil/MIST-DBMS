@@ -1,28 +1,19 @@
-import './globals.css'
+'use client'
+import { createContext, useContext, useState } from 'react'
 
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-
-import { UserProvider } from './providers/userProvider'
-import { AuthGuard } from '@/components/auth/AuthGuard'
-
-const inter = Inter({ subsets: ['latin'] })
-
-export const metadata: Metadata = {
-  title: 'MIST',
-  description: 'MIST Cinema - Your go-to site for movie ratings and information',
+type UserContextType = {
+  user: any
+  setUser: (user: any) => void
 }
 
-export default function RootLayout({ children }: any) {
-  return (
-    <html lang="en">
-      <body>
-        
-        <UserProvider>
-          <main>{children}</main>
-        </UserProvider>
-        
-      </body>
-    </html>
-  )
+const UserContext = createContext<UserContextType>({
+  user: null,
+  setUser: () => {},
+})
+
+export function UserProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState(null)
+  return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>
 }
+
+export const useUser = () => useContext(UserContext)
