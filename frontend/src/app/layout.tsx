@@ -1,28 +1,24 @@
-'use client'
-import { createContext, useContext, useState } from 'react'
+import './globals.css'
 
-type UserContextType = {
-  user: any
-  setUser: (user: any) => void
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+
+import { UserProvider } from './providers/userProvider'
+
+const inter = Inter({ subsets: ['latin'] })
+
+export const metadata: Metadata = {
+  title: 'MIST',
+  description: 'MIST Cinema - Your go-to site for movie ratings and information',
 }
 
-const UserContext = createContext<UserContextType>({
-  user: null,
-  setUser: () => {},
-})
-
-export function UserProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState(null)
-  return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>
-}
-
-export const useUser = () => useContext(UserContext)
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: any) {
   return (
-    <html>
+    <html lang="en" className={inter.className}>
       <body>
-        <UserProvider>{children}</UserProvider>
+        <UserProvider>
+          <main>{children}</main>
+        </UserProvider>
       </body>
     </html>
   )
