@@ -1,6 +1,4 @@
-// components/MovieSearch.tsx
-'use client'
-import { movieService } from '@/services/movie.service' // Add this import
+import { movieService } from '@/services/movie.service'
 import { useState, useEffect } from 'react'
 import { useDebounce } from 'use-debounce'
 import { MovieCard } from './MovieCard'
@@ -13,9 +11,31 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Slider } from '@/components/ui/slider'
-import { Loader2 } from 'lucide-react'
-import { toast } from 'sonner'
 import type { Movie } from '@/types/movie'
+import { toast } from 'sonner'
+
+const LoadingSkeleton = () => {
+  return (
+    <div className="rounded-lg border border-border p-4 space-y-3">
+      <div className="w-full h-48 bg-muted animate-pulse rounded-md" />
+      <div className="space-y-2">
+        <div className="h-4 bg-muted animate-pulse rounded w-3/4" />
+        <div className="h-4 bg-muted animate-pulse rounded w-1/2" />
+        <div className="h-4 bg-muted animate-pulse rounded w-2/3" />
+      </div>
+    </div>
+  );
+};
+
+const LoadingGrid = () => {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {[...Array(8)].map((_, index) => (
+        <LoadingSkeleton key={index} />
+      ))}
+    </div>
+  );
+};
 
 const genres = ['All', 'Action', 'Comedy', 'Drama', 'Sci-Fi', 'Horror', 'Romance']
 const sortOptions = [
@@ -60,16 +80,6 @@ export default function MovieSearch() {
 
     searchMovies()
   }, [debouncedQuery, selectedGenre, yearRange, sortBy])
-
-  const [isMounted, setIsMounted] = useState(false)
-
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  if (!isMounted) {
-    return null
-  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -127,9 +137,7 @@ export default function MovieSearch() {
 
         {/* Results */}
         {loading ? (
-          <div className="flex justify-center py-8">
-            <Loader2 className="h-8 w-8 animate-spin" />
-          </div>
+          <LoadingGrid />
         ) : movies.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {movies.map((movie) => (
