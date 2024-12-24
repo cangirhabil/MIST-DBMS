@@ -3,7 +3,8 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
-import { UserProvider } from './providers/userProvider'
+// Update the import path to correctly point to the UserProvider
+import { UserProvider } from '@/app/providers/userProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: any) {
-  return ( 
+  return (
     <html lang="en" className={inter.className}>
       <body>
         <UserProvider>
