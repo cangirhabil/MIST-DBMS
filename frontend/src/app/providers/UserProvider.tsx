@@ -6,7 +6,6 @@ import { useUserStore } from '@/store/user'
 import { useAuthStore } from '@/store/auth'
 import { useEffect } from 'react'
 
-
 async function getCurrentUser() {
   try {
     const userId = useAuthStore.getState().user?.id
@@ -18,7 +17,7 @@ async function getCurrentUser() {
     return null
   }
 }
- 
+
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const setCurrentUser = useUserStore((state) => state.setCurrentUser)
 
@@ -31,7 +30,5 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     fetchUser()
   }, [setCurrentUser])
 
-  return(
-     <>{children}</>
-  )
-    }
+  return <>{children}</>
+}
