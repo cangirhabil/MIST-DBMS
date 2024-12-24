@@ -61,6 +61,16 @@ export default function MovieSearch() {
     searchMovies()
   }, [debouncedQuery, selectedGenre, yearRange, sortBy])
 
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  if (!isMounted) {
+    return null
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="space-y-6">
