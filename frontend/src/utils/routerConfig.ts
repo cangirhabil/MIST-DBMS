@@ -42,7 +42,7 @@ export const routes: RouteConfig = {
 export const createUrl = (
   pathname: string,
   params: URLSearchParams | ReadonlyURLSearchParams | null = null,
-  baseUrl: string = '',
+  baseUrl: string = 'https://mist-dbms.vercel.app',
 ) => {
   const url = new URL(pathname, baseUrl || 'http://localhost')
 
