@@ -1,7 +1,7 @@
 // components/MovieActions.tsx
 'use client'
 
-import { Movie } from '@/types/Movie'
+import { Movie } from '@/types/movie'
 import { AddToListDialog } from './AddToListDialog'
 
 interface MovieActionsProps {

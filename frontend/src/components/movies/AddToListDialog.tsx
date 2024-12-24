@@ -2,7 +2,7 @@
 'use client'
 import { movieListService } from '@/services/movieList.service'
 import { useState, useEffect } from 'react'
-import { Movie } from '@/types/Movie'
+import { Movie } from '@/types/movie'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,

@@ -1,5 +1,5 @@
 // components/ViewListDialog.tsx
-import { Movie } from '@/types/Movie'
+
 import { MovieList } from '@/types/MovieList'
 import {
   Dialog,

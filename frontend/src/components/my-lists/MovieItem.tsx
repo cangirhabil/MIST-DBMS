@@ -2,7 +2,7 @@
 
 'use client'
 
-import { Movie } from '@/types/Movie'
+import { Movie } from '@/types/movie'
 import { Button } from '@/components/ui/button'
 import { Eye, Trash2 } from 'lucide-react'
 import Link from 'next/link'

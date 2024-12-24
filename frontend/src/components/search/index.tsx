@@ -15,7 +15,7 @@ import {
 import { Slider } from '@/components/ui/slider'
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
-import type { Movie } from '@/types/Movie'
+import type { Movie } from '@/types/movie'
 
 const genres = ['All', 'Action', 'Comedy', 'Drama', 'Sci-Fi', 'Horror', 'Romance']
 const sortOptions = [

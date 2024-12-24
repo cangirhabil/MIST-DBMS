@@ -2,7 +2,7 @@
 'use client'
 
 import { useParams } from 'next/navigation'
-import { Movie } from '@/types/Movie'
+import { Movie } from '@/types/movie'
 import { Badge } from '@/components/ui/badge'
 import { Clock, Star, Calendar, User, ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'

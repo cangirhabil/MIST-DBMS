@@ -1,6 +1,6 @@
 'use client'
 
-import { Movie } from '@/types/Movie'
+import { Movie } from '@/types/movie'
 import { Star, Clock } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 

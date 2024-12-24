@@ -4,7 +4,7 @@ import loadingAnimation from '../../../../public/loading-animation.json'
 import dynamic from 'next/dynamic'
 import { Plus } from 'lucide-react'
 import { MovieList } from '@/types/MovieList'
-import { Movie } from '@/types/Movie'
+import { Movie } from '@/types/movie'
 
 import { Button } from '@/components/ui/button'
 import {

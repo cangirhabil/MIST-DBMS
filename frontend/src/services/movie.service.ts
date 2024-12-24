@@ -1,4 +1,4 @@
-import { Movie } from '../types/Movie'
+import { Movie } from '../types/movie'
 
 const API_BASE_URL = process.env.API_URL || 'http://localhost:3003'
 
