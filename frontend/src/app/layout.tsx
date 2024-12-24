@@ -3,8 +3,8 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
-// Update the import path to correctly point to the UserProvider
-import { UserProvider } from '@/app/providers/userProvider'
+import { UserProvider } from './providers/userProvider'
+import { AuthGuard } from '@/components/auth/AuthGuard'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,7 +18,9 @@ export default function RootLayout({ children }: any) {
     <html lang="en" className={inter.className}>
       <body>
         <UserProvider>
-          <main>{children}</main>
+          <AuthGuard>
+            <main>{children}</main>
+          </AuthGuard>
         </UserProvider>
       </body>
     </html>
