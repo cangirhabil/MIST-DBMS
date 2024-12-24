@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { MovieActions } from '@/components/movies/MovieActions'
+import {LoadingScreen} from '@/components/loading'
 
 export default function MoviePage() {
   const params = useParams()
@@ -43,8 +44,9 @@ export default function MoviePage() {
     fetchMovie()
   }, [movieId])
 
+  
   if (loading) {
-    return <div>Loading...</div>
+    return <LoadingScreen /> 
   }
 
   if (!movie) {

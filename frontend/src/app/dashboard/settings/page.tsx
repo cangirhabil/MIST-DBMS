@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import loadingAnimation from '../../../../public/loading-animation.json'
 import dynamic from 'next/dynamic'
 import AccountSettings from '@/components/settings/accountSettings'
-import { AuthGuard } from '@/components/auth/AuthGuard'
+import { LoadingScreen } from '@/components/loading'
 
 const Lottie = dynamic(() => import('lottie-react'), {
   ssr: false,

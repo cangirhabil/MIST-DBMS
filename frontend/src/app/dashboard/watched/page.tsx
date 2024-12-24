@@ -1,9 +1,8 @@
 'use client'
 import React from 'react'
-import loadingAnimation from '../../../../public/loading-animation.json'
 import { movieWatchedListService } from '@/services/movieWatchedList.service'
 import { toast } from '@/hooks/use-toast'
-import Lottie from 'lottie-react'
+import { LoadingScreen } from '@/components/loading'
 
 const Rate: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false)
@@ -54,13 +53,7 @@ const Rate: React.FC = () => {
 
   return (
     <div>
-      {isLoading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
-          <div className="w-50 h-50">
-            <Lottie animationData={loadingAnimation} loop={true} />
-          </div>
-        </div>
-      )}
+      {isLoading && <LoadingScreen />}
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-8">Watched Movies</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

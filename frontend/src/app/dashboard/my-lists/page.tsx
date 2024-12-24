@@ -1,7 +1,5 @@
 'use client'
 import React from 'react'
-import loadingAnimation from '../../../../public/loading-animation.json'
-import dynamic from 'next/dynamic'
 import { Plus } from 'lucide-react'
 import { MovieList } from '@/types/MovieList'
 import { Movie } from '@/types/movie'
@@ -22,12 +20,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { MovieListCard } from '@/components/my-lists/MovieListCard'
 import { ViewListDialog } from '@/components/my-lists/ViewListDialog'
 import { movieListService } from '@/services/movieList.service'
+import { LoadingScreen } from '@/components/loading'
 
-
-const Lottie = dynamic(() => import('lottie-react'), {
-  ssr: false,
-  loading: () => <div>Loading...</div>,
-})
 
 const MyListsPage: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false)
@@ -151,7 +145,7 @@ const MyListsPage: React.FC = () => {
       {isLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
           <div className="w-24 h-24">
-            <Lottie animationData={loadingAnimation} loop={true} />
+            <LoadingScreen />
           </div>
         </div>
       )}
