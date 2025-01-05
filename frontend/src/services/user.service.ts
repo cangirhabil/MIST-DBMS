@@ -13,7 +13,7 @@ export const userService = {
     if (!token) {
       throw new Error('User is not logged in.')
     }
-
+ 
     try {
       // Fixed URL format
       const response = await fetch(`${API_BASE_URL}/user/updateUser/id=${userId}`, {
