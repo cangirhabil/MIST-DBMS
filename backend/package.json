@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "migrate": "prisma migrate deploy",
-    "seed": "ts-node prisma/seed.ts",
+    "seed": "prisma db seed",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
