@@ -127,3 +127,4 @@ class MovieListController {
     }
 }
 exports.MovieListController = MovieListController;
+//# sourceMappingURL=movieListController.js.map

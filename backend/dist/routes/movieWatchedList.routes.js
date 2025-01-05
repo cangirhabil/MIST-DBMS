@@ -9,3 +9,4 @@ router.post("/users/:userId/watched", movieWatchedListController.addMovieToWatch
 router.delete("/watched/:id", movieWatchedListController.removeMovieFromWatchedList);
 router.get("/users/:userId/watched", movieWatchedListController.getWatchedMoviesByUserId);
 exports.default = router;
+//# sourceMappingURL=movieWatchedList.routes.js.map
