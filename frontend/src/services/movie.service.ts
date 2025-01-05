@@ -1,6 +1,10 @@
 import { Movie } from '../types/movie'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mist-dbms.up.railway.app'
+const API_URL = process.env.NEXT_PUBLIC_API_URL
+
+if (!API_URL) {
+  throw new Error('NEXT_PUBLIC_API_URL is not defined')
+}
 
 interface SearchMoviesResponse {
   results: Movie[]
@@ -41,7 +45,7 @@ export const movieService = {
         }
       })
 
-      const response = await fetch(`${API_BASE_URL}/movie/search?${queryParams}`, {
+      const response = await fetch(`${API_URL}/movie/search?${queryParams}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -83,7 +87,7 @@ export const movieService = {
 
   async getMovieDetails(id: number): Promise<Movie> {
     try {
-      const response = await fetch(`${API_BASE_URL}/movies/${id}`, {
+      const response = await fetch(`${API_URL}/movies/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

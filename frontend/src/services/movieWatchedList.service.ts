@@ -1,6 +1,10 @@
 import useAuthStore from '@/store/auth'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mist-dbms.up.railway.app'
+const API_URL = process.env.NEXT_PUBLIC_API_URL
+
+if (!API_URL) {
+  throw new Error('NEXT_PUBLIC_API_URL is not defined')
+}
 
 export const movieWatchedListService = {
   async addMovieToWatchedList(movieData: {
@@ -20,7 +24,7 @@ export const movieWatchedListService = {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/watched/users/${userId}/watched`, {
+      const response = await fetch(`${API_URL}/watched/users/${userId}/watched`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -49,7 +53,7 @@ export const movieWatchedListService = {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/watched/watched/${movieId}`, {
+      const response = await fetch(`${API_URL}/watched/watched/${movieId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -74,7 +78,7 @@ export const movieWatchedListService = {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/watched/users/${userId}/watched`, {
+      const response = await fetch(`${API_URL}/watched/users/${userId}/watched`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,

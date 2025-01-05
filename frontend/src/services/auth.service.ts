@@ -3,7 +3,11 @@ import useAuthStore from '@/store/auth'
 import axios, { AxiosError } from 'axios'
 
 // NEXT_PUBLIC_ prefix'i ile environment variable'ı client-side'da kullanılabilir hale getiriyoruz
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mist-dbms.up.railway.app'
+const API_URL = process.env.NEXT_PUBLIC_API_URL
+
+if (!API_URL) {
+  throw new Error('NEXT_PUBLIC_API_URL is not defined')
+}
 
 const api = axios.create({
   baseURL: API_URL.endsWith('/') ? API_URL.slice(0, -1) : API_URL,

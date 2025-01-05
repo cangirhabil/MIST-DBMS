@@ -1,7 +1,11 @@
 import { User } from '../types/user'
 import { useAuthStore } from '../store/auth'
 //http://localhost:3003/user/id=cm4onqe4x0000ovr5zsiiciq0
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mist-dbms.up.railway.app'
+const API_URL = process.env.NEXT_PUBLIC_API_URL
+
+if (!API_URL) {
+  throw new Error('NEXT_PUBLIC_API_URL is not defined')
+}
 
 export const userService = {
   async updateUserProfile(
@@ -16,7 +20,7 @@ export const userService = {
  
     try {
       // Fixed URL format
-      const response = await fetch(`${API_BASE_URL}/user/updateUser/id=${userId}`, {
+      const response = await fetch(`${API_URL}/user/updateUser/id=${userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -46,7 +50,7 @@ export const userService = {
 
     try {
       // Fixed URL format
-      const response = await fetch(`${API_BASE_URL}/user/getUser/id=${userId}`, {
+      const response = await fetch(`${API_URL}/user/getUser/id=${userId}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -77,7 +81,7 @@ export const userService = {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/user/updatePassword/id=${userId}`, {
+      const response = await fetch(`${API_URL}/user/updatePassword/id=${userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

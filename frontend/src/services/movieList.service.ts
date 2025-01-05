@@ -1,7 +1,11 @@
 import { MovieList } from '../types/MovieList'
 import useAuthStore from '@/store/auth'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mist-dbms.up.railway.app'
+const API_URL = process.env.NEXT_PUBLIC_API_URL
+
+if (!API_URL) {
+  throw new Error('NEXT_PUBLIC_API_URL is not defined')
+}
 
 export const movieListService = {
   async getMovieListsByUserId(): Promise<MovieList[]> {
@@ -12,7 +16,7 @@ export const movieListService = {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/lists/getMovieLists/userId=${userId}`, {
+      const response = await fetch(`${API_URL}/lists/getMovieLists/userId=${userId}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -42,7 +46,7 @@ export const movieListService = {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/lists/updateMovieList/${listId}`, {
+      const response = await fetch(`${API_URL}/lists/updateMovieList/${listId}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -70,7 +74,7 @@ export const movieListService = {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/lists/deleteMovieList/${listId}`, {
+      const response = await fetch(`${API_URL}/lists/deleteMovieList/${listId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -95,7 +99,7 @@ export const movieListService = {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/lists/addMovieToList/${listId}/${movieId}`, {
+      const response = await fetch(`${API_URL}/lists/addMovieToList/${listId}/${movieId}`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -121,15 +125,12 @@ export const movieListService = {
     } 
 
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/lists/removeMovieFromList/${listId}/${movieId}`,
-        {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await fetch(`${API_URL}/lists/removeMovieFromList/${listId}/${movieId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      )
+      })
 
       if (!response.ok) {
         const errorData = await response.json()
@@ -151,7 +152,7 @@ export const movieListService = {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/lists/createMovieList`, {
+      const response = await fetch(`${API_URL}/lists/createMovieList`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
