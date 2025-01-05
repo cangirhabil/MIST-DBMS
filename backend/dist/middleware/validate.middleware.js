@@ -11,4 +11,3 @@ const validateRequest = (req, res, next) => {
     next();
 };
 exports.validateRequest = validateRequest;
-//# sourceMappingURL=validate.middleware.js.map

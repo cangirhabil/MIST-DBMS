@@ -6,4 +6,3 @@ const router = (0, express_1.Router)();
 const movieController = new movieController_1.MovieController();
 router.get("/search", (req, res) => movieController.searchMovies(req, res));
 exports.default = router;
-//# sourceMappingURL=movie.routes.js.map

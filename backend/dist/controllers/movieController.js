@@ -98,4 +98,3 @@ class MovieController {
     }
 }
 exports.MovieController = MovieController;
-//# sourceMappingURL=movieController.js.map

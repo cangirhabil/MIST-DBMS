@@ -24,4 +24,3 @@ app.use(error_middleware_1.errorHandler);
 app.listen(config_1.config.port, () => {
     console.log(`Server running on port ${config_1.config.port}`);
 });
-//# sourceMappingURL=server.js.map

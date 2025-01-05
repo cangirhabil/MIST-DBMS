@@ -46,4 +46,3 @@ router.put("/updatePassword/id=:id", [
 });
 exports.default = router;
 // Update password
-//# sourceMappingURL=user.routes.js.map

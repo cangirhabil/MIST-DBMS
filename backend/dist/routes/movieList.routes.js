@@ -11,4 +11,3 @@ router.post("/addMovieToList/:listId/:movieId", movieListController.addMovieToLi
 router.delete("/removeMovieFromList/:listId/:movieId", movieListController.removeMovieFromList);
 router.post("/createMovieList", movieListController.createMovieList);
 exports.default = router;
-//# sourceMappingURL=movieList.routes.js.map

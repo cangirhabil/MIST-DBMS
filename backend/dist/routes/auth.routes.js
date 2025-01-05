@@ -13,4 +13,3 @@ router.post("/register", [
 ], authController_1.register);
 router.post("/login", [(0, express_validator_1.body)("email").isEmail(), (0, express_validator_1.body)("password").exists(), validate_middleware_1.validateRequest], authController_1.login);
 exports.default = router;
-//# sourceMappingURL=auth.routes.js.map

@@ -7,8 +7,8 @@ exports.login = exports.register = void 0;
 const client_1 = require("@prisma/client");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const passwordUtils_1 = require("../utils/passwordUtils");
+const index_1 = require("../config/index");
 const prisma = new client_1.PrismaClient();
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 const register = async (req, res) => {
     try {
         const { email, password, name } = req.body;
@@ -21,7 +21,7 @@ const register = async (req, res) => {
         const user = await prisma.user.create({
             data: { email, password: hashedPassword, name },
         });
-        const token = jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "24h" });
+        const token = jsonwebtoken_1.default.sign({ userId: user.id }, index_1.config.jwtSecret, { expiresIn: "24h" });
         res.status(201).json({
             message: "User registered successfully",
             token,
@@ -46,7 +46,7 @@ const login = async (req, res) => {
             res.status(401).json({ error: "Invalid credentials" });
             return;
         }
-        const token = jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, {
+        const token = jsonwebtoken_1.default.sign({ userId: user.id }, index_1.config.jwtSecret, {
             expiresIn: "24h",
         });
         res.json({
@@ -64,4 +64,3 @@ const login = async (req, res) => {
     }
 };
 exports.login = login;
-//# sourceMappingURL=authController.js.map
