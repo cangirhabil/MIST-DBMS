@@ -7,6 +7,12 @@ export async function middleware(request: NextRequest) {
   const isUnauthorizedPage = request.nextUrl.pathname === '/unauthorized'
 
   // Eğer token yoksa ve sayfa unauthorized veya ana sayfa değilse, unauthorized sayfasına yönlendir
+
+  if (!token) {
+    console.log('Token yok')
+  } else {
+    console.log('Token var')
+  }
   if (!token && !isHomePage && !isUnauthorizedPage) {
     return NextResponse.redirect(new URL('/unauthorized', request.url))
   }
@@ -15,5 +21,17 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/', '/unauthorized', '/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: [
+    '/',
+    '/unauthorize',
+    /*
+    
+     * Aşağıdaki yollarla başlayanlar HARİÇ tüm istekleri eşleştirir:
+     * - api (API rotaları)
+     * - _next/static (statik dosyalar)
+     * - _next/image (resim optimizasyon dosyaları)
+     * - favicon.ico (favicon dosyası)
+     * '/((?!api|_next/static|_next/image|favicon.ico).*)',
+     */
+  ],
 }
