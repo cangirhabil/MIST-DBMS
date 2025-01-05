@@ -1,7 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import process from "process";
-
+import { config } from "dotenv";
+config();
 async function main() {
   // Önce bazı Genre'ler oluşturalım
   const genres = await Promise.all([
