@@ -4,11 +4,14 @@ import type { NextRequest } from 'next/server'
 const publicPaths = ['/', '/auth', '/unauthorized']
 
 export async function middleware(request: NextRequest) {
-  const token = request.cookies.get('auth-storage')?.value
+  const authStorage = request.cookies.get('auth-storage')?.value
   const path = request.nextUrl.pathname
  
   // Public path kontrolü
   const isPublicPath = publicPaths.includes(path)
+
+  // Parse stored auth data
+  const token = authStorage ? JSON.parse(authStorage)?.state?.token : null
 
   // Eğer token yoksa ve public path değilse, unauthorized sayfasına yönlendir
   if (!token && !isPublicPath) {
