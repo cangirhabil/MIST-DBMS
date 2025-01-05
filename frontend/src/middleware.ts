@@ -1,23 +1,28 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-const publicPaths = ['/', '/auth', '/unauthorized']
+// Sadece bu sayfalara erişim izni var
+const PUBLIC_PATHS = ['/', '/unauthorized']
 
-export async function middleware(request: NextRequest) {
-  const token = request.cookies.get('auth-storage')?.value
-  const path = request.nextUrl.pathname
+export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
 
-  // Public path kontrolü
-  const isPublicPath = publicPaths.includes(path)
+  // Auth token kontrolü
+  const authData = request.cookies.get('auth-storage')?.value
+  let token = null
 
-  // Eğer token yoksa ve public path değilse, unauthorized sayfasına yönlendir
-  if (!token && !isPublicPath) {
-    return NextResponse.redirect(new URL('/unauthorized', request.url))
+  if (authData) {
+    try {
+      const parsed = JSON.parse(authData)
+      token = parsed.state?.token || null
+    } catch (error) {
+      console.error('Token parsing error:', error)
+    }
   }
 
-  // Eğer token varsa ve auth sayfasındaysa, ana sayfaya yönlendir
-  if (token && path === '/auth') {
-    return NextResponse.redirect(new URL('/', request.url))
+  // Eğer public path'te değilse ve token yoksa, unauthorized sayfasına yönlendir
+  if (!PUBLIC_PATHS.includes(pathname) && !token) {
+    return NextResponse.redirect(new URL('/unauthorized', request.url))
   }
 
   return NextResponse.next()
@@ -25,10 +30,12 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/',
-    '/auth',
-    '/unauthorized',
-    // Aşağıdaki yollarla başlayanlar HARİÇ tüm istekleri eşleştirir
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
 }
