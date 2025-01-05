@@ -6,7 +6,7 @@ export const ROUTE_PATHS = {
   MY_LISTS: '/dashboard/my-lists',
   WATCHED: '/dashboard/watched',
   AUTH: '/auth',
-  
+  UNAUTHORIZED: '/unauthorized',
 }
 
 export const ROUTE_NAMES = {
@@ -16,4 +16,5 @@ export const ROUTE_NAMES = {
   MY_LISTS: 'myLists',
   WATCHED: 'watched',
   AUTH: 'auth',
+  UNAUTHORIZED: 'unauthorized',
 }

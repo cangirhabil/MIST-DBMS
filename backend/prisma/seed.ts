@@ -69,7 +69,7 @@ async function main() {
       title: "Pulp Fiction",
       releaseYear: 1994,
       posterUrl:
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.imdb.com%2Ftitle%2Ftt0110912%2F&psig=AOvVaw1pD2S1t522J3Y-nM2lhAxO&ust=1734287692003000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCMCt95_zp4oDFQAAAAAdAAAAABAE",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqbyVhBV9ydF60ujFz6-w5E3VA7CnmuWB3Jg&s",
       rating: 8.9,
       director: "Quentin Tarantino",
       duration: 154,

@@ -1,12 +1,22 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+const publicPaths = ['/', '/auth', '/unauthorized']
+
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get('auth-storage')?.value
-  const isHomePage = request.nextUrl.pathname === '/'
+  const path = request.nextUrl.pathname
 
-  // Eğer token yoksa ve ana sayfa veya auth sayfası değilse, ana sayfaya yönlendir
-  if (!token && !isHomePage) {
+  // Public path kontrolü
+  const isPublicPath = publicPaths.includes(path)
+
+  // Eğer token yoksa ve public path değilse, unauthorized sayfasına yönlendir
+  if (!token && !isPublicPath) {
+    return NextResponse.redirect(new URL('/unauthorized', request.url))
+  }
+
+  // Eğer token varsa ve auth sayfasındaysa, ana sayfaya yönlendir
+  if (token && path === '/auth') {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
@@ -16,14 +26,9 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/',
-    /*
-    
-     * Aşağıdaki yollarla başlayanlar HARİÇ tüm istekleri eşleştirir:
-     * - api (API rotaları)
-     * - _next/static (statik dosyalar)
-     * - _next/image (resim optimizasyon dosyaları)
-     * - favicon.ico (favicon dosyası)
-     * '/((?!api|_next/static|_next/image|favicon.ico).*)',
-     */
+    '/auth',
+    '/unauthorized',
+    // Aşağıdaki yollarla başlayanlar HARİÇ tüm istekleri eşleştirir
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
 }
