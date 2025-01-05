@@ -41,7 +41,7 @@
     "seed": "ts-node prisma/seed.ts"
   },
   "engines": {
-    "node": "20.17.0",
-    "npm": "9.x"
+    "node": ">=20.17.0 <22",
+    "npm": ">=9.0.0"
   }
 }
