@@ -4,6 +4,8 @@
   "description": "IMDB Clone Backend",
   "main": "dist/server.js",
   "scripts": {
+    "migrate": "prisma migrate deploy",
+    "seed": "ts-node prisma/seed.ts",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
