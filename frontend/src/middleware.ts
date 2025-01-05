@@ -6,7 +6,7 @@ const publicPaths = ['/', '/auth', '/unauthorized']
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get('auth-storage')?.value
   const path = request.nextUrl.pathname
-
+ 
   // Public path kontrolü
   const isPublicPath = publicPaths.includes(path)
 
