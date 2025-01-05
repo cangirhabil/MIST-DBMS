@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-const PUBLIC_PATHS = ['/', '/unauthorized', '/auth/login'] // login sayfasını da ekleyin
+const PUBLIC_PATHS = ['/', '/unauthorized'] // login sayfasını da ekleyin
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
