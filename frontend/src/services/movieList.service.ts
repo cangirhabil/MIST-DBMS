@@ -1,7 +1,7 @@
 import { MovieList } from '../types/MovieList'
 import useAuthStore from '@/store/auth'
 
-const API_BASE_URL = process.env.API_URL || 'http://localhost:3003'
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mist-dbms.up.railway.app'
 
 export const movieListService = {
   async getMovieListsByUserId(): Promise<MovieList[]> {

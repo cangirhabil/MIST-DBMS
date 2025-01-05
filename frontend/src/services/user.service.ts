@@ -1,10 +1,9 @@
 import { User } from '../types/user'
 import { useAuthStore } from '../store/auth'
 //http://localhost:3003/user/id=cm4onqe4x0000ovr5zsiiciq0
-const API_BASE_URL = process.env.API_URL || 'http://localhost:3003'
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mist-dbms.up.railway.app'
 
 export const userService = {
-
   async updateUserProfile(
     userId: string,
     updatedData: { name?: string; email?: string },

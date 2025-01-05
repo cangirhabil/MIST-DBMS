@@ -1,15 +1,16 @@
 import { AuthResponse } from '@/types/auth'
 import useAuthStore from '@/store/auth'
-
 import axios, { AxiosError } from 'axios'
-const API_URL = process.env.API_URL || 'http://localhost:3003'
+
+// NEXT_PUBLIC_ prefix'i ile environment variable'ı client-side'da kullanılabilir hale getiriyoruz
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mist-dbms.up.railway.app'
 
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: API_URL.endsWith('/') ? API_URL.slice(0, -1) : API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-}) 
+})
 
 export const signupWithEmailAndPassword = async (
   email: string,
@@ -36,16 +37,17 @@ export const signupWithEmailAndPassword = async (
       return {
         success: false,
         user: null,
-        error: error.response?.data?.error || 'Registration failed',
+        error: error.response?.data?.error || 'Kayıt işlemi başarısız oldu',
       }
     }
     return {
       success: false,
       user: null,
-      error: 'An unexpected error occurred',
+      error: 'Beklenmeyen bir hata oluştu',
     }
   }
 }
+
 
 export const loginWithEmailAndPassword = async (
   email: string,
@@ -78,7 +80,7 @@ export const loginWithEmailAndPassword = async (
 export const updatePassword = async (
   userId: string,
   currentPassword: string,
-  newPassword: string
+  newPassword: string,
 ): Promise<{ success: boolean; message: string }> => {
   const token = useAuthStore.getState().token
 
@@ -100,7 +102,7 @@ export const updatePassword = async (
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     )
 
     return {
@@ -124,7 +126,6 @@ export const updatePassword = async (
 export const logOut = async (): Promise<void> => {
   const clearAuth = useAuthStore.getState().clearAuth
   try {
-    
     clearAuth()
   } catch (error) {
     console.error('Logout error:', error)
