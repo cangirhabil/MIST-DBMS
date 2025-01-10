@@ -1,4 +1,4 @@
-import { MovieList } from '../types/MovieList'
+import { MovieList } from '../../types/MovieList'
 import useAuthStore from '@/store/auth'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
@@ -92,7 +92,7 @@ export const movieListService = {
   },
 
   async addMovieToList(listId: string, movieId: number): Promise<MovieList> {
-  console.log(listId, movieId)
+    console.log(listId, movieId)
     const token = useAuthStore.getState().token
     if (!token) {
       throw Error('User is not logged in.')
@@ -122,7 +122,7 @@ export const movieListService = {
     const token = useAuthStore.getState().token
     if (!token) {
       throw Error('User is not logged in.')
-    } 
+    }
 
     try {
       const response = await fetch(`${API_URL}/lists/removeMovieFromList/${listId}/${movieId}`, {

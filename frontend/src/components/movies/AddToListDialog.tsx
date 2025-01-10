@@ -1,6 +1,6 @@
 // components/AddToListDialog.tsx
 'use client'
-import { movieListService } from '@/services/movieList.service'
+import { movieListService } from '@/lib/services/movieList.service'
 import { useState, useEffect } from 'react'
 import { Movie } from '@/types/movie'
 import { Button } from '@/components/ui/button'
@@ -16,7 +16,6 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Plus, Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useToast } from '@/hooks/use-toast'
-
 
 interface AddToListDialogProps {
   movie: Movie

@@ -11,7 +11,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useToast } from '@/hooks/use-toast'
 
-import { loginWithEmailAndPassword, signupWithEmailAndPassword } from '@/services/auth.service'
+import { loginWithEmailAndPassword, signupWithEmailAndPassword } from '@/lib/services/auth.service'
 import { AuthGuard } from '@/components/auth/AuthGuard'
 import { ROUTE_PATHS } from '@/constants/route'
 import dynamic from 'next/dynamic'

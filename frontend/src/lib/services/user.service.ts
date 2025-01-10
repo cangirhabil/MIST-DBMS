@@ -1,5 +1,5 @@
-import { User } from '../types/user'
-import { useAuthStore } from '../store/auth'
+import { User } from '../../types/user'
+import { useAuthStore } from '../../store/auth'
 //http://localhost:3003/user/id=cm4onqe4x0000ovr5zsiiciq0
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
@@ -17,7 +17,7 @@ export const userService = {
     if (!token) {
       throw new Error('User is not logged in.')
     }
- 
+
     try {
       // Fixed URL format
       const response = await fetch(`${API_URL}/user/updateUser/id=${userId}`, {

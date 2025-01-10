@@ -1,4 +1,4 @@
-import { Movie } from '../types/movie'
+import { Movie } from '../../types/movie'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 

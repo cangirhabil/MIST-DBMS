@@ -19,9 +19,8 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { MovieListCard } from '@/components/my-lists/MovieListCard'
 import { ViewListDialog } from '@/components/my-lists/ViewListDialog'
-import { movieListService } from '@/services/movieList.service'
+import { movieListService } from '@/lib/services/movieList.service'
 import { LoadingScreen } from '@/components/loading'
-
 
 const MyListsPage: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false)
@@ -56,18 +55,18 @@ const MyListsPage: React.FC = () => {
   }
 
   const handleCreateList = async () => {
-  if (!newList.title) return
+    if (!newList.title) return
 
-  try {
-    const createdList = await movieListService.createMovieList(newList.title, newList.description)
-    setLists((prev) => [...prev, createdList])
-    setNewList({ title: '', description: '' })
-    setIsCreateOpen(false)
-  } catch (error) {
-    console.error('Failed to create list:', error)
-    setError('Failed to create list. Please try again.')
+    try {
+      const createdList = await movieListService.createMovieList(newList.title, newList.description)
+      setLists((prev) => [...prev, createdList])
+      setNewList({ title: '', description: '' })
+      setIsCreateOpen(false)
+    } catch (error) {
+      console.error('Failed to create list:', error)
+      setError('Failed to create list. Please try again.')
+    }
   }
-}
 
   const handleEditList = async () => {
     if (!editingList) return
@@ -93,7 +92,6 @@ const MyListsPage: React.FC = () => {
     if (!listToDelete) return
 
     try {
-      
       await movieListService.deleteMovieList(listToDelete.id)
       setLists((prev) => prev.filter((list) => list.id !== listToDelete.id))
       setIsDeleteDialogOpen(false)
@@ -135,10 +133,8 @@ const MyListsPage: React.FC = () => {
         }
         return list
       }),
-    ) 
+    )
   }
-
- 
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
@@ -187,9 +183,7 @@ const MyListsPage: React.FC = () => {
                 <Textarea
                   id="description"
                   value={newList.description}
-                  onChange={(e) =>
-                    setNewList((prev) => ({ ...prev, description: e.target.value }))
-                  }
+                  onChange={(e) => setNewList((prev) => ({ ...prev, description: e.target.value }))}
                   placeholder="Enter list description"
                 />
               </div>
@@ -224,7 +218,6 @@ const MyListsPage: React.FC = () => {
         ))}
       </div>
 
-      
       <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -267,8 +260,7 @@ const MyListsPage: React.FC = () => {
           <DialogHeader>
             <DialogTitle>Delete List</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete "{listToDelete?.title}"? This action cannot be
-              undone.
+              Are you sure you want to delete "{listToDelete?.title}"? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

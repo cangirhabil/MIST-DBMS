@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { movieWatchedListService } from '@/services/movieWatchedList.service'
+import { movieWatchedListService } from '@/lib/services/movieWatchedList.service'
 import { toast } from '@/hooks/use-toast'
 import { LoadingScreen } from '@/components/loading'
 

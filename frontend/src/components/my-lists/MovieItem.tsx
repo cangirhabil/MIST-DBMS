@@ -6,8 +6,8 @@ import { Movie } from '@/types/movie'
 import { Button } from '@/components/ui/button'
 import { Eye, Trash2 } from 'lucide-react'
 import Link from 'next/link'
-import { movieListService } from '@/services/movieList.service'
-import { movieWatchedListService } from '@/services/movieWatchedList.service' // Add this import
+import { movieListService } from '@/lib/services/movieList.service'
+import { movieWatchedListService } from '@/lib/services/movieWatchedList.service' // Add this import
 
 interface MovieItemProps {
   movie: Movie

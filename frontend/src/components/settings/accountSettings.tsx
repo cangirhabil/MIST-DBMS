@@ -1,8 +1,6 @@
 'use client'
 
-
-
-import { userService } from '@/services/user.service'
+import { userService } from '@/lib/services/user.service'
 import { useAuthStore } from '@/store/auth'
 
 import { useEffect } from 'react'
@@ -52,7 +50,7 @@ export default function AccountSettings() {
   // Modify handleUpdateName function
   const handleUpdateName = async (data: z.infer<typeof nameSchema>) => {
     try {
-      await userUpdates.handleUpdateUserProfile({ name: data.username,})
+      await userUpdates.handleUpdateUserProfile({ name: data.username })
       await updateName(data)
     } catch (error) {
       console.error('Error updating name:', error)
@@ -101,7 +99,7 @@ export default function AccountSettings() {
   function useUserUpdates() {
     const userId = useAuthStore.getState().user?.id
 
-    const handleUpdateUserProfile = async (data: { name: string;}) => {
+    const handleUpdateUserProfile = async (data: { name: string }) => {
       if (!userId) throw new Error('User ID not found')
 
       try {
@@ -219,13 +217,11 @@ export default function AccountSettings() {
   )
 }
 
-
-
 // First, move the useUserUpdates hook outside of the component
 function useUserUpdates() {
   const userId = useAuthStore.getState().user?.id
 
-  const handleUpdateUserProfile = async (data: { name: string;}) => {
+  const handleUpdateUserProfile = async (data: { name: string }) => {
     if (!userId) throw new Error('User ID not found')
 
     try {

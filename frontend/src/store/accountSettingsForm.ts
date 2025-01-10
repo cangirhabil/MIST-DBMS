@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { toast } from '@/hooks/use-toast'
-import { updatePassword } from '@/services/auth.service'
-import { userService } from '@/services/user.service'
+import { updatePassword } from '@/lib/services/auth.service'
+import { userService } from '@/lib/services/user.service'
 import { useAuthStore } from '@/store/auth' // Add this import
 
 interface LoadingState {
@@ -17,7 +17,7 @@ interface AccountSettingsStore {
   setLoading: (type: keyof LoadingState, value: boolean) => void
   setUserProfile: (profile: Record<string, any> | null) => void
   fetchUserProfile: () => Promise<void>
-  updateName: (data: { username: string;}) => Promise<void>
+  updateName: (data: { username: string }) => Promise<void>
   updatePassword: (data: {
     currentPassword: string
     newPassword: string
@@ -116,7 +116,11 @@ export const useAccountSettingsStore = create<AccountSettingsStore>((set, get) =
 
     try {
       setLoading('password', true)
-      const response = await updatePassword(data.currentPassword, data.newPassword, data.confirmPassword)
+      const response = await updatePassword(
+        data.currentPassword,
+        data.newPassword,
+        data.confirmPassword,
+      )
       toast({
         title: 'Başarılı',
         description: response.message,

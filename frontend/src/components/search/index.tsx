@@ -1,7 +1,7 @@
 // components/MovieSearch.tsx
 'use client'
 
-import { movieService } from '@/services/movie.service'
+import { movieService } from '@/lib/services/movie.service'
 import { useState, useEffect, useCallback } from 'react'
 import { useDebounce } from 'use-debounce'
 import { MovieCard } from './MovieCard'
@@ -28,7 +28,7 @@ const SORT_OPTIONS = [
   { value: 'title', label: 'Title' },
 ] as const
 
-type SortOption = typeof SORT_OPTIONS[number]['value']
+type SortOption = (typeof SORT_OPTIONS)[number]['value']
 
 export default function MovieSearch() {
   const [searchQuery, setSearchQuery] = useState('')

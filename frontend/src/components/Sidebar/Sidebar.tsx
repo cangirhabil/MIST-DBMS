@@ -8,7 +8,7 @@ import { FiSettings } from 'react-icons/fi'
 import { SidebarItem } from './SidebarItem'
 import { LogoutIcon } from '../shared/Icons'
 import { cn } from '@/lib/utils'
-import { logOut } from '@/services/auth.service'
+import { logOut } from '@/lib/services/auth.service'
 import { usePathname, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { ROUTE_NAMES, ROUTE_PATHS } from '@/constants/route'
@@ -24,7 +24,7 @@ export const Sidebar: FC = () => {
     name: currentUser?.name || '',
     email: currentUser?.email || '',
     password: '',
-    id: ''
+    id: '',
   }
 
   const pathname = usePathname() // Mevcut yol adını al

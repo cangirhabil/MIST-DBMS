@@ -102,3 +102,82 @@ ALTER TABLE "_MovieGenres" ADD CONSTRAINT "_MovieGenres_A_fkey" FOREIGN KEY ("A"
 
 -- AddForeignKey
 ALTER TABLE "_MovieGenres" ADD CONSTRAINT "_MovieGenres_B_fkey" FOREIGN KEY ("B") REFERENCES "Movie"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- CREATE VIEW: İzlenen filmlerle ilgili detaylı bilgileri gösteren view
+CREATE VIEW vw_MovieWatchDetails AS
+SELECT 
+    mw.id,
+    u.name as user_name,
+    m.title,
+    m.releaseYear,
+    m.director,
+    STRING_AGG(g.name, ', ') as genres,
+    mw.rating,
+    mw.createdAt as watched_date
+FROM MovieWatchedList mw
+JOIN "User" u ON mw.userId = u.id
+JOIN Movie m ON mw.movieId = m.id
+LEFT JOIN "_MovieGenres" mg ON m.id = mg.B
+LEFT JOIN Genre g ON mg.A = g.id
+GROUP BY mw.id, u.name, m.title, m.releaseYear, m.director, mw.rating, mw.createdAt;
+
+-- CREATE STORED PROCEDURE: Film izleme listesine film ekleme
+CREATE OR REPLACE PROCEDURE sp_AddMovieToWatchedList(
+    p_userId TEXT,
+    p_movieId INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    INSERT INTO MovieWatchedList (
+        id, userId, movieId, title, releaseYear, posterUrl, 
+        rating, director, duration, overview
+    )
+    SELECT 
+        gen_random_uuid()::TEXT,
+        p_userId,
+        m.id,
+        m.title,
+        m.releaseYear,
+        m.posterUrl,
+        m.rating,
+        m.director,
+        m.duration,
+        m.overview
+    FROM Movie m
+    WHERE m.id = p_movieId;
+END;
+$$;
+
+-- CREATE FUNCTION: Kullanıcının ortalama film değerlendirmesini hesaplama
+CREATE OR REPLACE FUNCTION fn_CalculateUserAverageRating(p_userId TEXT)
+RETURNS DECIMAL
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_average DECIMAL;
+BEGIN
+    SELECT AVG(rating)
+    INTO v_average
+    FROM MovieWatchedList
+    WHERE userId = p_userId
+    AND rating IS NOT NULL;
+    
+    RETURN COALESCE(v_average, 0);
+END;
+$$;
+
+-- CREATE TRIGGER FUNCTION: Film güncelleme timestamp fonksiyonu
+CREATE OR REPLACE FUNCTION trg_UpdateMovieTimestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updatedAt = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- CREATE TRIGGER: Film güncellendiğinde timestamp güncelleme
+CREATE TRIGGER tr_MovieUpdateTimestamp
+    BEFORE UPDATE ON Movie
+    FOR EACH ROW
+    EXECUTE FUNCTION trg_UpdateMovieTimestamp();

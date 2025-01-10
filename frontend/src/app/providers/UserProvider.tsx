@@ -1,7 +1,7 @@
 // app/providers/UserProvider.tsx
 'use client'
 
-import { userService } from '@/services/user.service'
+import { userService } from '@/lib/services/user.service'
 import { useUserStore } from '@/store/user'
 import { useAuthStore } from '@/store/auth'
 import { useEffect } from 'react'
