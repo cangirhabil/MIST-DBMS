@@ -77,7 +77,7 @@ export const Sidebar: FC = () => {
       <div className="flex flex-col h-full">
         <div className="p-1 flex items-center justify-center">
           <div className="relative w-12 h-12 md:w-60 md:h-60">
-            <Image src="/images/logo.png" alt="Logo" fill className="object-contain" />
+            <Image src="/images/admin.png" alt="Logo" fill className="object-contain" />
           </div>
         </div>
         <nav className="flex-1 overflow-y-auto">

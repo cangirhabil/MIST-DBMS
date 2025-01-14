@@ -155,4 +155,33 @@ export const userService = {
       throw error instanceof Error ? error : new Error('Failed to fetch users')
     }
   },
+
+
+
+  async getUserCount(): Promise<{ count: number }> {
+    const token = useAuthStore.getState().token
+
+    if (!token) {
+      throw new Error('User is not logged in.')
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/user/usersCount`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      })
+
+      if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.message || 'Failed to get user count')
+      }
+
+      return await response.json()
+    } catch (error) {
+      console.error('Error getting user count:', error)
+      throw error instanceof Error ? error : new Error('Failed to get user count')
+    }
+    },
 }

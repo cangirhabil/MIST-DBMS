@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { config } from "./config";
 import authRoutes from "./routes/auth.routes";
+import adminRoutes from "./routes/admin.routes"
 import movieListRoutes from "./routes/movieList.routes";
 import movieRoutes from "./routes/movie.routes";
 import { errorHandler } from "./middleware/error.middleware";
@@ -18,6 +19,7 @@ app.use("/lists", movieListRoutes);
 app.use("/user", userRoutes)
 app.use("/movie", movieRoutes);
 app.use("/watched", movieWatchedListRoutes)
+app.use("/admin", adminRoutes);
 
 app.use(errorHandler);
 
