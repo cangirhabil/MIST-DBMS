@@ -37,6 +37,18 @@ export const routes: RouteConfig = {
     path: ROUTE_PATHS.WATCHED,
     generatePath: () => ROUTE_PATHS.WATCHED,
   },
+  unauthorized: {
+    path: ROUTE_PATHS.UNAUTHORIZED,
+    generatePath: () => ROUTE_PATHS.UNAUTHORIZED,
+  },
+  statistics: {
+    path: ROUTE_PATHS.ADMIN_STATISTICS,
+    generatePath: () => ROUTE_PATHS.ADMIN_STATISTICS,
+  },
+  users: {
+    path: ROUTE_PATHS.ADMIN_USERS,
+    generatePath: () => ROUTE_PATHS.ADMIN_USERS,
+  },
 }
 // URL oluşturucu utility fonksiyonu
 export const createUrl = (

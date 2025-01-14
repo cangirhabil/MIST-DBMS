@@ -7,6 +7,8 @@ export const ROUTE_PATHS = {
   WATCHED: '/dashboard/watched',
   AUTH: '/auth',
   UNAUTHORIZED: '/unauthorized',
+  ADMIN_STATISTICS: '/admin/statistics',
+  ADMIN_USERS: '/admin/users'
 }
 
 export const ROUTE_NAMES = {
@@ -17,4 +19,6 @@ export const ROUTE_NAMES = {
   WATCHED: 'watched',
   AUTH: 'auth',
   UNAUTHORIZED: 'unauthorized',
+  ADMIN_STATISTICS: 'statistics',
+  ADMIN_USERS: 'users',
 }
