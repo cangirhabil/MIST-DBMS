@@ -10,18 +10,18 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   const user = useAuthStore((state) => state.user)
 
   useEffect(() => {
-    if (user == null) {
+    if (user?.id ===" ") {
+      router.replace(ROUTE_PATHS.ADMIN_STATISTICS)
+    } else if (user === null) {
       router.replace(ROUTE_PATHS.HOME)
     } else {
-      router.replace(ROUTE_PATHS.MY_LISTS) // veya başka bir sayfa
+      router.replace(ROUTE_PATHS.MY_LISTS)
     }
   }, [user, router])
 
-  // Kullanıcı authenticated ise ve yönlendirme yapılıyorsa
-  // sayfanın içeriğini gösterme
-  if (user) {
-    return null
+  if (!user) {
+    return <>{children}</>
   }
 
-  return <>{children}</>
+  return null
 }
