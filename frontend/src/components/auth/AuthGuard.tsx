@@ -10,7 +10,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   const user = useAuthStore((state) => state.user)
 
   useEffect(() => {
-    if (user?.id ===" ") {
+    if (user?.id === 'cm5wwbr0t000inz0f1m6jniww') {
       router.replace(ROUTE_PATHS.ADMIN_STATISTICS)
     } else if (user === null) {
       router.replace(ROUTE_PATHS.HOME)
