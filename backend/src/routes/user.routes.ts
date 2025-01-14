@@ -61,5 +61,21 @@ router.put(
   }
 );
 
+
+router.delete(
+  "/users/:id",
+  (req: Request, res: Response, next: NextFunction) => {
+    userProfileController.deleteUser(req, res).catch(next);
+  }
+);
+
+// Get all users
+router.get("/users", (req: Request, res: Response, next: NextFunction) => {
+  userProfileController.getAllUsers(req, res).catch(next);
+});
+
+router.get("/usersCount", (req: Request, res: Response, next: NextFunction) => {
+  userProfileController.getUserCount(req, res).catch(next);
+});
 export default router;
 // Update password

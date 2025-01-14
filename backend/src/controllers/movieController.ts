@@ -110,4 +110,19 @@ export class MovieController {
       });
     }
   }
+
+  async getMovieCount(req: Request, res: Response) {
+    try {
+      const count = await prisma.movie.count();
+      res.json({ count });
+    } catch (error) {
+      console.error("Count error:", error);
+      res.status(500).json({
+        error:
+          error instanceof Error
+            ? error.message
+            : "An unexpected error occurred",
+      });
+    }
+  }
 }

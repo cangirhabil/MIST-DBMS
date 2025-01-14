@@ -99,4 +99,60 @@ export const userService = {
       throw error instanceof Error ? error : new Error('Failed to update password')
     }
   },
+ 
+  async deleteUser(userId: string): Promise<void> {
+    const token = useAuthStore.getState().token
+
+    if (!token) {
+      throw new Error('User is not logged in.')
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/user/users/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message || 'Failed to delete user')
+      }
+    } catch (error) {
+      console.error('Error deleting user:', error)
+      throw error instanceof Error ? error : new Error('Failed to delete user')
+    }
+  },
+
+
+  
+  async getAllUsers(): Promise<User[]> {
+
+
+    const token = useAuthStore.getState().token
+
+    if (!token) {
+      throw new Error('User is not logged in.')
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/user/users`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message || 'Failed to fetch users')
+      }
+
+      return await response.json()
+    } catch (error) {
+      console.error('Error fetching users:', error)
+      throw error instanceof Error ? error : new Error('Failed to fetch users')
+    }
+  },
 }

@@ -1,5 +1,5 @@
-"use client"
-import React, { useState } from 'react'
+'use client'
+import React, { useState, useEffect } from 'react'
 import {
   Table,
   TableBody,
@@ -12,16 +12,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Search, Trash2 } from 'lucide-react'
+import { userService } from '@/lib/services/user.service'
+import { User } from '@/types/user'
 
-// Types
-type User = {
-  id: string
-  name?: string
-  email?: string
-  password?: string
-}
-
-// Search Component
 const SearchBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
   return (
     <div className="relative w-full max-w-sm">
@@ -35,9 +28,8 @@ const SearchBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
   )
 }
 
-// Users Table Component
 const UsersTable = ({
-  users,
+  users = [],
   onDeleteUser,
 }: {
   users: User[]
@@ -52,6 +44,28 @@ const UsersTable = ({
     } else {
       setDeleteConfirmId(userId)
     }
+  }
+
+  if (!users || users.length === 0) {
+    return (
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>ID</TableHead>
+            <TableHead>İsim</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead className="text-right">İşlemler</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell colSpan={4} className="text-center">
+              Kullanıcı bulunamadı
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    )
   }
 
   return (
@@ -86,18 +100,45 @@ const UsersTable = ({
   )
 }
 
-// Main Users Page Component
-const UsersPage = () => {
-  // Örnek veri - gerçek uygulamada API'den gelecek
-  const [users, setUsers] = useState<User[]>([
-    { id: '1', name: 'Ahmet Yılmaz', email: 'ahmet@example.com' },
-    { id: '2', name: 'Mehmet Demir', email: 'mehmet@example.com' },
-    { id: '3', name: 'Ayşe Kaya', email: 'ayse@example.com' },
-  ])
+interface UsersResponse {
+  users: User[]
+  total: number
+}
 
-  const [filteredUsers, setFilteredUsers] = useState<User[]>(users)
+const UsersPage = () => {
+  const [users, setUsers] = useState<User[]>([])
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([])
+  const [error, setError] = useState<string>('')
+  const [loading, setLoading] = useState(true)
+  const [total, setTotal] = useState<number>(0)
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        setLoading(true)
+        const response = await userService.getAllUsers()
+        // API'den gelen yanıtı doğru şekilde işle
+        const data = response as unknown as UsersResponse
+        setUsers(data.users)
+        setFilteredUsers(data.users)
+        setTotal(data.total)
+      } catch (err) {
+        setError('Kullanıcılar yüklenirken bir hata oluştu')
+        console.error(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchUsers()
+  }, [])
 
   const handleSearch = (searchTerm: string) => {
+    if (!searchTerm.trim()) {
+      setFilteredUsers(users)
+      return
+    }
+
     const filtered = users.filter(
       (user) =>
         user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -106,10 +147,27 @@ const UsersPage = () => {
     setFilteredUsers(filtered)
   }
 
-  const handleDeleteUser = (userId: string) => {
-    const updatedUsers = users.filter((user) => user.id !== userId)
-    setUsers(updatedUsers)
-    setFilteredUsers(updatedUsers)
+  const handleDeleteUser = async (userId: string) => {
+    try {
+      await userService.deleteUser(userId)
+      const updatedUsers = users.filter((user) => user.id !== userId)
+      setUsers(updatedUsers)
+      setFilteredUsers(updatedUsers)
+      setTotal((prev) => prev - 1) // Total sayısını güncelle
+    } catch (err) {
+      setError('Kullanıcı silinirken bir hata oluştu')
+      console.error(err)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="container mx-auto py-8">
+        <Card className="w-full">
+          <CardContent className="flex justify-center items-center h-40">Yükleniyor...</CardContent>
+        </Card>
+      </div>
+    )
   }
 
   return (
@@ -117,7 +175,10 @@ const UsersPage = () => {
       <Card className="w-full">
         <CardHeader>
           <CardTitle>Kullanıcı Yönetimi</CardTitle>
-          <CardDescription>Sistemde kayıtlı kullanıcıları görüntüleyin ve yönetin.</CardDescription>
+          <CardDescription>
+            Sistemde kayıtlı {total} kullanıcıyı görüntüleyin ve yönetin.
+          </CardDescription>
+          {error && <div className="text-red-500 mt-2">{error}</div>}
           <div className="mt-4">
             <SearchBar onSearch={handleSearch} />
           </div>
