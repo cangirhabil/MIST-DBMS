@@ -44,5 +44,15 @@ router.put("/updatePassword/id=:id", [
 ], validateRequest, (req, res, next) => {
     userProfileController.updatePassword(req, res).catch(next);
 });
+router.delete("/users/:id", (req, res, next) => {
+    userProfileController.deleteUser(req, res).catch(next);
+});
+// Get all users
+router.get("/users", (req, res, next) => {
+    userProfileController.getAllUsers(req, res).catch(next);
+});
+router.get("/usersCount", (req, res, next) => {
+    userProfileController.getUserCount(req, res).catch(next);
+});
 exports.default = router;
 // Update password

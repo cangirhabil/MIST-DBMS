@@ -125,5 +125,16 @@ class MovieListController {
             });
         }
     }
+    async getMovieListsCount(req, res) {
+        try {
+            const count = await prisma.movieList.count();
+            res.json({ count });
+        }
+        catch (error) {
+            res.status(500).json({
+                error: error instanceof Error ? error.message : "Unknown error",
+            });
+        }
+    }
 }
 exports.MovieListController = MovieListController;
