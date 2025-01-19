@@ -1,11 +1,9 @@
 <p align="center">
   <img src="https://user-images.githubusercontent.com/26466516/107675802-36216b80-6c77-11eb-8db1-4d3407dc53d9.png" alt="Next.js and TypeScript">
 </p>
-
-
 <br>
 
-A full-featured Next.js starter that includes all you need to build amazing projects 🔥. Fork and customize from [jpedroschmitz](https://github.com/jpedroschmitz/typescript-nextjs-starter)
+A full-featured MIST includes all you need to build amazing projects.
 
 - 🚀 **Next.js 15 App Router & React 18**
 - ⚙️ **Tailwind CSS 3** - A utility-first CSS framework
@@ -20,35 +18,13 @@ A full-featured Next.js starter that includes all you need to build amazing proj
 
 ## 🚀 Getting started
 
-The best way to start with this template is using `create-next-app`.
-
-```
-npx create-next-app ts-next -e https://github.com/chhpt/nextjs-starter
-```
-
-or
-
-```
-pnpm create next-app ts-next -e https://github.com/chhpt/nextjs-starter
-```
-
 If you prefer you can clone this repository and run the following commands inside the project folder:
 
 1. `pnpm install` or `npm install`;
-2. `pnpm dev`;
+2. `npm run dev`;
 
 To view the project open `http://localhost:3000`.
 
-## 🤝 Contributing
+## 🤝 Made with by:
 
-1. Fork this repository;
-2. Create your branch: `git checkout -b my-new-feature`;
-3. Commit your changes: `git commit -m 'Add some feature'`;
-4. Push to the branch: `git push origin my-new-feature`.
-
-**After your pull request is merged**, you can safely delete your branch.
-
-## 📝 License
-
-
-Made with ♥ by Habil Cangir, Niyazi Emre Akbaş, Bahadır Semih Korkmaz
+Habil Cangir, Niyazi Emre Akbaş, Bahadır Semih Korkmaz
