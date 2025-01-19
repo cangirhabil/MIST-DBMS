@@ -3,7 +3,7 @@
 </p>
 <br>
 
-A full-featured MIST includes all you need to build amazing projects.
+A full-featured amazing projects.
 
 - 🚀 **Next.js 15 App Router & React 18**
 - ⚙️ **Tailwind CSS 3** - A utility-first CSS framework
